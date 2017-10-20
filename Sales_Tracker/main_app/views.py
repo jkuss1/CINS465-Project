@@ -8,4 +8,4 @@ from .forms import *
 def index(request):
 	context = {}
 	
-	return render(request, "default.html", context)
+	return render(request, "index.html", context)
