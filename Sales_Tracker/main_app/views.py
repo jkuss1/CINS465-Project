@@ -6,8 +6,6 @@ from .forms import *
 
 # Create your views here.
 def index(request):
-	context = {
-		"pageTitle": "Home",
-	}
+	context = {}
 	
 	return render(request, "default.html", context)

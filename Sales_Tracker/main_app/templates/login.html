@@ -1,1 +1,18 @@
 {% extends "default.html" %}
+
+{% block title %}
+	Login - Sales Tracker
+{% endblock%}
+
+{% block content %}
+	<div class="grid-container">
+		<form method="post" action="{% url 'login' %}">
+			{% csrf_token %}
+
+			<h2 class="text-center">Login</h2>
+			{{ form }}
+			<input type="submit" class="" value="Login">
+			<a href="/register" class="">Register</a>
+		</form>
+	</div>
+{% endblock %}
