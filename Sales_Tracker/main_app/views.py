@@ -9,9 +9,19 @@ from .forms import *
 
 # Create your views here.
 def index(request):
-	context = {}
+	context = {
+		'indexPage': True
+	}
 	
 	return render(request, "index.html", context)
+
+@login_required
+def account(request):
+	context = {
+		'username': request.user
+	}
+
+	return render(request, "account/account.html", context)
 
 def register(request):
 	if request.method == "POST":
@@ -25,7 +35,7 @@ def register(request):
 			)
 
 			login(request, user)
-			return HttpResponseRedirect('/')
+			return HttpResponseRedirect('/account/')
 	else:
 		form = RegistrationForm()
 	
@@ -33,4 +43,4 @@ def register(request):
 		'form': form
 	}
 	
-	return render(request, "register.html", context)
+	return render(request, "registration/register.html", context)
