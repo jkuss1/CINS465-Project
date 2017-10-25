@@ -2,6 +2,30 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 
+from .models import *
+
+class NewItemForm(forms.ModelForm):
+	img = forms.ImageField(
+		label = "Image File"
+	)
+
+	imgDesc = forms.CharField(
+		label = "Image Description"
+	)
+
+	class Meta:
+		model = Item
+		exclude = ["user"]
+	
+	def save(self, user, commit=True):
+		item = super(NewItemForm, self).save(commit=False)
+		item.user = user
+		
+		if commit:
+			item.save()
+		
+		return item
+
 class RegistrationForm(UserCreationForm):
 	email = forms.EmailField(
 		label = "Email",
