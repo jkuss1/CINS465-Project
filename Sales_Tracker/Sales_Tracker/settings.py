@@ -119,7 +119,17 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATICFILES_DIR = [
+    os.path.join(BASE_DIR, 'main_app', 'static'),
+    os.path.join(BASE_DIR, 'assets'),
+]
 
 
 # Login Settings
-LOGIN_REDIRECT_URL = "/account/"
+LOGIN_REDIRECT_URL = '/account/'
+
+
+# Media Settings
+MEDIA_ROOT = os.path.join(BASE_DIR, 'user_media')
+MEDIA_URL = '/media/'

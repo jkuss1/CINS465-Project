@@ -18,7 +18,8 @@ def index(request):
 @login_required
 def account(request):
 	context = {
-		'username': request.user
+		'username': request.user,
+		'items': Item.objects.all()
 	}
 
 	return render(request, "account/account.html", context)

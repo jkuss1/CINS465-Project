@@ -3,7 +3,12 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 def UserDirectoryPath(instance, filename):
-	return "user_data/{0} - {1}/{2}/{3}".format(instance.user.id, instance.user, instance.name, filename)
+	return "{0} - {1}/{2}/{3}".format(
+		instance.user.id,
+		instance.user.username,
+		instance.name,
+		filename
+	)
 
 class Item(models.Model):
 	user = models.ForeignKey(

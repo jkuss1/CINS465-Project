@@ -1,10 +1,11 @@
 # Sales Tracker
-### Created By:
+### Created By
 - Erik Ingvoldsen
 - Jacob Kuss
 
-# Proposal:
+# Proposal
 Create an application that keeps track of items purchased and sold.
+
 This app will track:
 * The name of the item
 * The time period of the sales
@@ -19,14 +20,14 @@ The user would be able to add items and thus create more form fields for all of 
 
 In addition to this, the application would compare months and how well the company faired. Users would also be able to see what times of the year an item gains and dips in popularity and, if we can manage it, the effects of discounts on sales numbers and profits earned.
 
-### Pages:
+### Pages
 * Home
 * Sales Data Input
 * Sales Data (Stored Raw Data)
 * Sales Information (Statistics of Sales and Profits)
 * Overlayed Calculator
 
-### Timeline:
+### Timeline
 Date | Task/Page Completed
 -- | --
 10/16-10/22 | Home & Login Pages
@@ -39,5 +40,5 @@ Date | Task/Page Completed
 12/4-12/10  | Presentation Week. Finish up any incomplete work.
 12/11-12/15 | Clean up week. Test and further polish the site.
 
-### Work Split:
+### Work Split
 Erik will focus on front-end and Jacob will focus on back-end, assisting each other when necessary, particularly on weeks that may focus on one or the other.
