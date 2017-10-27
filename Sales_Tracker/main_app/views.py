@@ -7,10 +7,16 @@ from django.contrib.auth.models import User
 from .models import *
 from .forms import *
 
-# Create your views here.
+# FUNCTIONS #
+def GET_USER_ITEMS(user):
+	if user.is_authenticated:
+		return Item.objects.filter(user=user)
+
+# VIEWS #
 def index(request):
 	context = {
-		'indexPage': True
+		'indexPage': True,
+		'items': GET_USER_ITEMS(request.user)
 	}
 	
 	return render(request, "index.html", context)
@@ -19,26 +25,26 @@ def index(request):
 def account(request):
 	context = {
 		'username': request.user,
-		'items': Item.objects.all()
+		'items': GET_USER_ITEMS(request.user)
 	}
 
 	return render(request, "account/account.html", context)
 
 @login_required
 def add_item(request):
-	if request.method == "POST":
-		newItemForm = NewItemForm(request.POST, request.FILES)
+	if request.method == "POST" and request.user.is_authenticated:
+		newItemForm = NewItemForm(request.POST)
 
 		if newItemForm.is_valid():
-			item = newItemForm.save(user=request.user)
-			item = authenticate(
+			Item(
+				user = request.user,
 				name = newItemForm.cleaned_data.get("name"),
-				details = newItemForm.cleaned_data.get("details"),
-				img = newItemForm.cleaned_data.get("img"),
-				imgDesc = newItemForm.cleaned_data.get("imgDesc")
-			)
+				cost = newItemForm.cleaned_data.get("cost"),
+				price = newItemForm.cleaned_data.get("price"),
+				details = newItemForm.cleaned_data.get("details")
+			).save()
 
-			return HttpResponseRedirect('/account/')
+			return HttpResponseRedirect("/account/")
 	else:
 		newItemForm = NewItemForm()
 	
@@ -47,6 +53,34 @@ def add_item(request):
 	}
 
 	return render(request, "account/add_item.html", context)
+
+@login_required
+def add_item_images(request, itemID):
+	item = Item.objects.get(id=itemID)
+	
+	if request.user == item.user:
+		if request.method == "POST":
+			newImageForm = NewImageForm(request.POST, request.FILES)
+
+			if newImageForm.is_valid():
+				ItemImage(
+					item = item,
+					img = newImageForm.cleaned_data.get("img"),
+					desc = newImageForm.cleaned_data.get("desc")
+				).save()
+				
+				return HttpResponseRedirect("/account/")
+		else:
+			newImageForm = NewImageForm()
+	else:
+		return HttpResponseRedirect("/account/")
+	
+	context = {
+		'form': newImageForm,
+		'item': item
+	}
+
+	return render(request, "account/add_item_images.html", context)
 
 def register(request):
 	if request.method == "POST":
@@ -60,7 +94,7 @@ def register(request):
 			)
 
 			login(request, user)
-			return HttpResponseRedirect('/account/')
+			return HttpResponseRedirect("/account/")
 	else:
 		regForm = RegistrationForm()
 	

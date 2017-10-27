@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 
 {% block title %}
-	Add Item
+	Add Item Image
 {% endblock%}
 
 {% block content %}
 	<div class="grid-container">
-		<h1 class="text-center">Add New Item</h1>
-		<form method="post" action="{% url 'add_item' %}">
+		<h1 class="text-center">Add New Image to {{ item.name }}</h1>
+		<form method="post" action="{% url 'add_item_images' item.id %}" enctype="multipart/form-data">
 			{% csrf_token %}
 
 			{{ form }}
