@@ -34,11 +34,11 @@ class Item(models.Model):
 	
 	details = models.TextField()
 	
-	dateCreated = models.DateTimeField(
+	date_created = models.DateTimeField(
 		auto_now_add = True
 	)
 
-	dateUpdated = models.DateTimeField(
+	date_updated = models.DateTimeField(
 		auto_now = True
 	)
 
@@ -51,13 +51,13 @@ class ItemImage(models.Model):
 		on_delete = models.CASCADE
 	)
 
-	img = models.ImageField(
+	file = models.ImageField(
 		upload_to = UserDirectoryPath
 	)
 
-	desc = models.CharField(
+	alt = models.CharField(
 		max_length = 32
 	)
 
 	def __str__(self):
-		return self.desc
+		return self.alt

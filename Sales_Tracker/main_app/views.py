@@ -15,7 +15,7 @@ def GET_USER_ITEMS(user):
 # VIEWS #
 def index(request):
 	context = {
-		'indexPage': True,
+		'index_page': True,
 		'items': GET_USER_ITEMS(request.user)
 	}
 	
@@ -33,23 +33,23 @@ def account(request):
 @login_required
 def add_item(request):
 	if request.method == "POST" and request.user.is_authenticated:
-		newItemForm = NewItemForm(request.POST)
+		new_item_form = NewItemForm(request.POST)
 
-		if newItemForm.is_valid():
+		if new_item_form.is_valid():
 			Item(
 				user = request.user,
-				name = newItemForm.cleaned_data.get("name"),
-				cost = newItemForm.cleaned_data.get("cost"),
-				price = newItemForm.cleaned_data.get("price"),
-				details = newItemForm.cleaned_data.get("details")
+				name = new_item_form.cleaned_data.get("name"),
+				cost = new_item_form.cleaned_data.get("cost"),
+				price = new_item_form.cleaned_data.get("price"),
+				details = new_item_form.cleaned_data.get("details")
 			).save()
 
 			return HttpResponseRedirect("/account/")
 	else:
-		newItemForm = NewItemForm()
+		new_item_form = NewItemForm()
 	
 	context = {
-		'form': newItemForm
+		'form': new_item_form
 	}
 
 	return render(request, "account/add_item.html", context)
@@ -60,23 +60,23 @@ def add_item_images(request, itemID):
 	
 	if request.user == item.user:
 		if request.method == "POST":
-			newImageForm = NewImageForm(request.POST, request.FILES)
+			new_image_form = NewImageForm(request.POST, request.FILES)
 
-			if newImageForm.is_valid():
+			if new_image_form.is_valid():
 				ItemImage(
 					item = item,
-					img = newImageForm.cleaned_data.get("img"),
-					desc = newImageForm.cleaned_data.get("desc")
+					file = new_image_form.cleaned_data.get("file"),
+					alt = new_image_form.cleaned_data.get("alt")
 				).save()
 				
 				return HttpResponseRedirect("/account/")
 		else:
-			newImageForm = NewImageForm()
+			new_image_form = NewImageForm()
 	else:
 		return HttpResponseRedirect("/account/")
 	
 	context = {
-		'form': newImageForm,
+		'form': new_image_form,
 		'item': item
 	}
 
@@ -84,22 +84,22 @@ def add_item_images(request, itemID):
 
 def register(request):
 	if request.method == "POST":
-		regForm = RegistrationForm(request.POST)
+		reg_form = RegistrationForm(request.POST)
 
-		if regForm.is_valid():
-			user = regForm.save()
+		if reg_form.is_valid():
+			user = reg_form.save()
 			user = authenticate(
-				username = regForm.cleaned_data.get("username"),
-				password = regForm.cleaned_data.get("password1")
+				username = reg_form.cleaned_data.get("username"),
+				password = reg_form.cleaned_data.get("password1")
 			)
 
 			login(request, user)
 			return HttpResponseRedirect("/account/")
 	else:
-		regForm = RegistrationForm()
+		reg_form = RegistrationForm()
 	
 	context = {
-		'form': regForm
+		'form': reg_form
 	}
 	
 	return render(request, "registration/register.html", context)

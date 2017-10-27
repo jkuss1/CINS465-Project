@@ -28,7 +28,7 @@
             {{ form.password2 }}
             
 			<button type="submit" class="button expanded">Register</button>
-			<a href="/login" class="button expanded secondary">Login</a>
+			<a href="{% url 'login' %}" class="button expanded secondary">Login</a>
 		</form>
 	</div>
 {% endblock %}

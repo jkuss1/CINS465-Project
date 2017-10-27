@@ -6,14 +6,14 @@
 		<meta http-equiv="x-ua-compatible" content="ie=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<title>
-			{% if indexPage %}
+			{% if index_page %}
 				Sales Tracker
 			{% else %}
 				{% block title %}{% endblock %} &sdot; Sales Tracker
 			{% endif %}
 		</title>
-		<link rel="stylesheet" href="{% static "css/foundation.min.css" %}">
-		<link rel="stylesheet" href="{% static "css/app.css" %}">
+		<link rel="stylesheet" href="{% static 'css/foundation.min.css' %}">
+		<link rel="stylesheet" href="{% static 'css/app.css' %}">
 	</head>
 	<body>
 		<!-- Top Nav Bar -->
@@ -30,7 +30,7 @@
 								<li><a href="{% url 'add_item' %}">Add Item</a></li>
 							</ul>
 						</li>
-						<a href="/logout/">Logout</a>
+						<a href="{% url 'logout' %}">Logout</a>
 					</ul>
 				{% else %}
 					<a href="{% url 'register' %}">Register</a>
@@ -42,10 +42,10 @@
 		
 		{% block default_content %}{% endblock %}
 		{% block content %}{% endblock %}
-		<script src="{% static "js/vendor/jquery.js" %}"></script>
-		<script src="{% static "js/vendor/what-input.js" %}"></script>
-		<script src="{% static "js/vendor/foundation.min.js" %}"></script>
-		<script src="{% static "js/app.js" %}"></script>
+		<script src="{% static 'js/vendor/jquery.js' %}"></script>
+		<script src="{% static 'js/vendor/what-input.js' %}"></script>
+		<script src="{% static 'js/vendor/foundation.min.js' %}"></script>
+		<script src="{% static 'js/app.js' %}"></script>
 		{% block scripts %}{% endblock %}
 	</body>
 </html>
