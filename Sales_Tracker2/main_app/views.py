@@ -37,24 +37,48 @@ def account(request):
 
 	return render(request, "account/account.html", context)
 
+@login_required
+def add_item(request):
+	if request.method == "POST":
+		newItemForm = NewItemForm(request.POST, request.FILES)
+
+		if newItemForm.is_valid():
+			item = newItemForm.save(user=request.user)
+			item = authenticate(
+				name = newItemForm.cleaned_data.get("name"),
+				details = newItemForm.cleaned_data.get("details"),
+				img = newItemForm.cleaned_data.get("img"),
+				imgDesc = newItemForm.cleaned_data.get("imgDesc")
+			)
+
+			return HttpResponseRedirect('/account/')
+	else:
+		newItemForm = NewItemForm()
+	
+	context = {
+		'form': newItemForm
+	}
+
+	return render(request, "account/add_item.html", context)
+
 def register(request):
 	if request.method == "POST":
-		form = RegistrationForm(request.POST)
+		regForm = RegistrationForm(request.POST)
 
-		if form.is_valid():
-			user = form.save()
+		if regForm.is_valid():
+			user = regForm.save()
 			user = authenticate(
-				username = form.cleaned_data.get("username"),
-				password = form.cleaned_data.get("password1")
+				username = regForm.cleaned_data.get("username"),
+				password = regForm.cleaned_data.get("password1")
 			)
 
 			login(request, user)
 			return HttpResponseRedirect('/account/')
 	else:
-		form = RegistrationForm()
+		regForm = RegistrationForm()
 	
 	context = {
-		'form': form
+		'form': regForm
 	}
 	
 	return render(request, "registration/register.html", context)

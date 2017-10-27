@@ -14,4 +14,5 @@ urlpatterns = [
 	url(r'input$', InputPage.as_view(), name='input'),
 	url(r'sales$', SalesPage.as_view(), name='sales'),
 	url(r'info$', InfoPage.as_view(), name='info'),
+	url(r'account/add_item/$', views.add_item, name="add_item"),
 ]

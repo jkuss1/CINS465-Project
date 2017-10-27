@@ -1,8 +1,22 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 
-{% block body %}
-
-<div class="text-center">
-	<h1>Sales Data</h1>
-</div>
+{% block content %}
+	<div class="grid-container">
+		<h1 class="text-center">Sales Data</h1>
+		{% if user.is_authenticated %}
+			<h2>Item Sales (Example)</h2>
+			<p>Item Name:</p>
+			<p>Total Items Sold:</p>
+			<p>Items Sold During Discount Period (If Applicable):</p>
+			<p>Most Popular During The Month Of:</p>
+			<p>Least Popular During The Month Of:</p>
+			<p>Total Cost:</p>
+			<p>Total Revenue:</p>
+			<p>Total Cost:</p>
+			<p>Profit:</p>
+			<p>Item Image: (Based on upload from User Items)</p>
+		{% else %}
+			<p>Please log in to view your Sales Data.</p>
+		{% endif %}
+	</div>
 {% endblock %}

@@ -2,6 +2,12 @@
 
 {% block content %}
 	<div class="grid-container">
-		<h1 class="text-center">Sales Tracker</h1>
+		<h1 class="text-center">Sales Tracker Home Page</h1>
+		{% if user.is_authenticated %}
+			<h2>Your Items (Total Items)</h2>
+			<p>Your items go here.</p>
+		{% endif %}
+		<h2>Popular Items</h2>
+		<p>Popular items go here.</p>
 	</div>
 {% endblock %}
