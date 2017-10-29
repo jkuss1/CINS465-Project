@@ -5,8 +5,6 @@
 {% endblock%}
 
 {% block content %}
-	<div class="grid-container">
-		<h1 class="text-center">Welcome, {{ username }}</h1>
-		{% include 'user_items.html' %}
-	</div>
+	<h1 class="text-center">Welcome, {{ username }}</h1>
+	{% include 'sub_templates/user_items.html' %}
 {% endblock %}

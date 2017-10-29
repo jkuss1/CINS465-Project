@@ -1,8 +1,7 @@
-from django.shortcuts import render
-from django.http import JsonResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
+from django.http import JsonResponse, HttpResponseRedirect
+from django.shortcuts import render
 
 from .models import *
 from .forms import *
@@ -10,13 +9,18 @@ from .forms import *
 # FUNCTIONS #
 def GET_USER_ITEMS(user):
 	if user.is_authenticated:
-		return Item.objects.filter(user=user)
+		items = Item.objects.filter(user=user)
+
+		for item in items:
+			item.image_set = ItemImage.objects.filter(item=item)
+		
+		return items
 
 # VIEWS #
 def index(request):
 	context = {
 		'index_page': True,
-		'items': GET_USER_ITEMS(request.user)
+		'user_items': GET_USER_ITEMS(request.user)
 	}
 	
 	return render(request, "index.html", context)
@@ -25,7 +29,7 @@ def index(request):
 def account(request):
 	context = {
 		'username': request.user,
-		'items': GET_USER_ITEMS(request.user)
+		'user_items': GET_USER_ITEMS(request.user)
 	}
 
 	return render(request, "account/account.html", context)

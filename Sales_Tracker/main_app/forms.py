@@ -7,6 +7,14 @@ from .models import *
 MONEY_PLACEHOLDER = "12.34"
 
 class NewItemForm(forms.ModelForm):
+	name = forms.CharField(
+		widget = forms.TextInput(
+			attrs = {
+				'autofocus': True
+			}
+		)
+	)
+
 	cost = forms.DecimalField(
 		widget = forms.NumberInput(
 			attrs = {
@@ -28,6 +36,14 @@ class NewItemForm(forms.ModelForm):
 		exclude = ["user"]
 
 class NewImageForm(forms.ModelForm):
+	file = forms.ImageField(
+		label = "Image"
+	)
+
+	alt = forms.CharField(
+		label = "Description"
+	)
+
 	class Meta:
 		model = ItemImage
 		exclude = ["item"]
