@@ -1,8 +1,12 @@
 {% extends "base.html" %}
 
 {% block content %}
+	<body class="input">
 	<div class="grid-container">
 		<h1 class="text-center">User Items</h1>
+		<p>Here you can keep track of the items you added to your account and update
+		each item with relevant data so we may provide you the culmative data and
+		information.</p>
 		{% if user.is_authenticated %}
 			<h2>Item Details (Example)</h2>
 			<p>Item Name:</p>
@@ -16,4 +20,5 @@
 			<p>Please log in to view your items.</p>
 		{% endif %}
 	</div>
+	</body>
 {% endblock %}

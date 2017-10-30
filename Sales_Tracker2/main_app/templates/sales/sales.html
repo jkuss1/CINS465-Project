@@ -1,8 +1,12 @@
 {% extends "base.html" %}
 
 {% block content %}
+	<body class="data">
 	<div class="grid-container">
 		<h1 class="text-center">Sales Data</h1>
+		<p>In Sales Data we keep track of the data for the items you have added.
+		Please make sure to update the data for your items so we can provide you
+		with accurate information.</p>
 		{% if user.is_authenticated %}
 			<h2>Item Sales (Example)</h2>
 			<p>Item Name:</p>
@@ -19,4 +23,5 @@
 			<p>Please log in to view your Sales Data.</p>
 		{% endif %}
 	</div>
+	</body>
 {% endblock %}

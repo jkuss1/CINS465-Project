@@ -19,7 +19,6 @@
 		<!-- Top Nav Bar -->
 		<div class="top-bar">
 			<ul class="menu">
-				<li><a onclick="window.open('http://localhost:8000/calc','_blank','height=260,width=400')" />Calculator</a></li>
 				<li><a href="/">Sales Tracker</a></li>
 				<li><a href="input">User Items</a></li>
 				<li><a href="sales">Sales Data</a></li>
@@ -45,6 +44,35 @@
 			</div>
 		</div>
 		<!-- [END] Top Nav Bar -->
+		
+		<!-- Calculator -->
+		<input id="calc-btn" type="image" src="{% static 'media/icons/calculator-icon.png' %}" onclick="toggleCalculator()"/>
+		
+		<div id="calc">
+			<div id="calc-header">Calculator</div>
+			<input id="calc-input" type="text"/>
+			<button class="calc-btn">7</button>
+			<button class="calc-btn">8</button>
+			<button class="calc-btn">9</button>
+			<button class="calc-btn">*</button>
+			<br/>
+			<button class="calc-btn">4</button>
+			<button class="calc-btn">5</button>
+			<button class="calc-btn">6</button>
+			<button class="calc-btn">-</button>
+			<br/>
+			<button class="calc-btn">1</button>
+			<button class="calc-btn">2</button>
+			<button class="calc-btn">3</button>
+			<button class="calc-btn">+</button>
+			<br/>
+			<button class="calc-btn">0</button>
+			<button class="calc-btn">C</button>
+			<button class="calc-btn">=</button>
+			<button class="calc-btn">/</button>
+			<br/>
+		</div>
+		<!-- [END] Calculator -->
 		
 		{% block body %}{% endblock %}
 		
