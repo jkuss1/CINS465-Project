@@ -32,10 +32,22 @@ function dragElement(element)
 
 		element.style.left = (element.offsetLeft - x) + "px";
 		element.style.top = (element.offsetTop - y) + "px";
+		
+		if (element.offsetLeft - x < 0)
+			element.style.left = "0px";
+		else if(element.offsetLeft + element.offsetWidth > window.innerWidth)
+			element.style.left = (window.innerWidth - element.offsetWidth) + "px";
+		
+		if (element.offsetTop - y < 0)
+			element.style.top = "0px";
+		else if(element.offsetTop + element.offsetHeight > window.innerHeight)
+			element.style.top = (window.innerHeight - element.offsetHeight) + "px";
 	}
 
 	function stopDrag()
 	{
+		element.x = element.offsetLeft;
+		element.y = element.offsetTop;
 		document.onmousemove = null;
 		document.onmouseup = null;
 	}
@@ -48,12 +60,16 @@ function toggleCalculator()
 {
 	var calc = document.getElementById("calc");
 
-	if (calcShown) {
+	if (calcShown)
+	{
 		calc.style = "display: none";
 		calcShown = false;
 	}
-	else {
+	else
+	{
 		calc.style = "display: inline";
+		calc.style.left = calc.x + "px";
+		calc.style.top = calc.y + "px";
 		calcShown = true;
 	}
 }
@@ -67,6 +83,10 @@ $(".calc-btn").click(function() {
 		calcInput.value = "";
 	else
 		calcInput.value += $(this).html();
+});
+
+$("#calc-close").click(function () {
+	toggleCalculator();
 });
 
 dragElement(document.getElementById("calc"));

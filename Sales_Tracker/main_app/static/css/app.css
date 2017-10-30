@@ -24,6 +24,14 @@
 	border-radius: 3px;
 }
 
+#calc-close {
+	position: absolute;
+	top: 0px;
+	right: 3px;
+	cursor: pointer;
+	font-size: 0.8em;
+}
+
 .calc-btn {
 	background: white;
 	width: 20%;
