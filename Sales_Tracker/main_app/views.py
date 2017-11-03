@@ -19,7 +19,6 @@ def GET_USER_ITEMS(user):
 # VIEWS #
 def index(request):
 	context = {
-		'index_page': True,
 		'user_items': GET_USER_ITEMS(request.user)
 	}
 	
@@ -33,6 +32,18 @@ def account(request):
 	}
 
 	return render(request, "account/account.html", context)
+
+@login_required
+def user_items(request):
+	return render(request, 'account/user_items.html')
+
+@login_required
+def sales_data(request):
+	return render(request, 'account/sales_data.html')
+
+@login_required
+def sales_info(request):
+	return render(request, 'account/sales_info.html')
 
 @login_required
 def add_item(request):

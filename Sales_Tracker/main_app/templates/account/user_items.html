@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Your Items
+{% endblock %}
+
+{% block content %}
+	<body class="input">
+        <h1 class="text-center">User Items</h1>
+        <p>
+            Here you can keep track of the items you added to your account and update
+            each item with relevant data so we may provide you the culmative data and
+            information.
+        </p>
+        {% if user.is_authenticated %}
+            <h2>Item Details (Example)</h2>
+            <p>Item Name:</p>
+            <p>Cost Per Item:</p>
+            <p>Total Items Available:</p>
+            <p>Time Until Sale End:</p>
+            <p>Time Until Discount End (If Applicable):</p>
+            <p>Item Image: <label for="fileUpload" class="button">Upload Item Image</label></p>
+            <input type="file" id="fileUpload" class="show-for-sr">
+        {% else %}
+            <p>Please log in to view your items.</p>
+        {% endif %}
+	</body>
+{% endblock %}

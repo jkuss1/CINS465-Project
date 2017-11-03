@@ -1,3 +1,44 @@
+h1 {
+    color: white;
+	font-size: 50px;
+	font-family: "Times New Roman";
+	font-weight: bold;
+	text-indent: 20px;
+}
+
+h2 {
+    color: whitesmoke;
+	font-size: 40px;
+	font-family: "Times New Roman";
+	font-weight: bold;
+}
+
+p {
+    color: LightGrey;
+	font-size: 25px;
+	font-family: "Times New Roman";
+}
+
+body { 
+    background: SteelBlue;
+}
+
+body.home {
+	background-image: url("https://i.imgur.com/cVQG8a0.png");
+}
+
+body.input {
+	background-image: url("https://i.imgur.com/paAkoAn.png");
+}
+
+body.data {
+	background-image: url("https://i.imgur.com/VqeWR5L.png");
+}
+
+body.info {
+	background-image: url("https://i.imgur.com/rvPX85F.png");
+}
+
 #calc-btn {
 	position: fixed;
 	left: 5px;
