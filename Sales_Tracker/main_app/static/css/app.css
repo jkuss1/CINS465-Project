@@ -1,5 +1,5 @@
 h1 {
-    color: white;
+    color: red;
 	font-size: 50px;
 	font-family: "Times New Roman";
 	font-weight: bold;
@@ -9,6 +9,13 @@ h1 {
 h2 {
     color: whitesmoke;
 	font-size: 40px;
+	font-family: "Times New Roman";
+	font-weight: bold;
+}
+
+h3 {
+    color: LightGrey;
+	font-size: 35px;
 	font-family: "Times New Roman";
 	font-weight: bold;
 }

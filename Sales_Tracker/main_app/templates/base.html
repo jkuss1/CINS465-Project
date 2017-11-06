@@ -18,9 +18,11 @@
 		<nav class="top-bar">
 			<ul class="menu">
 				<li><a href="{% url 'index' %}">Sales Tracker</a></li>
-				<li><a href="{% url 'user_items' %}">User Items</a></li>
-				<li><a href="{% url 'sales_data' %}">Sales Data</a></li>
-				<li><a href="{% url 'sales_info' %}">Sales Information</a></li>
+				{% if user.is_authenticated %}
+					<li><a href="{% url 'user_items' %}">User Items</a></li>
+					<li><a href="{% url 'sales_data' %}">Sales Data</a></li>
+					<li><a href="{% url 'sales_info' %}">Sales Information</a></li>
+				{% endif %}
 			</ul>
 			<div class="top-bar-right">
 				<ul class="menu">
