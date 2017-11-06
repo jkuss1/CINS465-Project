@@ -31,6 +31,30 @@ class Item(models.Model):
 		decimal_places = 2,
 		null = True
 	)
+
+	units_available = models.IntegerField(
+		default = 0
+	)
+
+	sale_start = models.DateTimeField(
+		null = True,
+		blank = True
+	)
+	
+	sale_end = models.DateTimeField(
+		null = True,
+		blank = True
+	)
+
+	discount_start = models.DateTimeField(
+		null = True,
+		blank = True
+	)
+	
+	discount_end = models.DateTimeField(
+		null = True,
+		blank = True
+	)
 	
 	details = models.TextField()
 	

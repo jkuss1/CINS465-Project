@@ -12,7 +12,7 @@ def GET_USER_ITEMS(user):
 		items = Item.objects.filter(user=user)
 
 		for item in items:
-			item.image_set = ItemImage.objects.filter(item=item)
+			item.images = ItemImage.objects.filter(item=item)
 		
 		return items
 
@@ -35,7 +35,11 @@ def account(request):
 
 @login_required
 def user_items(request):
-	return render(request, 'account/user_items.html')
+	context = {
+		'user_items': GET_USER_ITEMS(request.user)
+	}
+
+	return render(request, 'account/user_items.html', context)
 
 @login_required
 def sales_data(request):
@@ -56,10 +60,15 @@ def add_item(request):
 				name = new_item_form.cleaned_data.get("name"),
 				cost = new_item_form.cleaned_data.get("cost"),
 				price = new_item_form.cleaned_data.get("price"),
+				units_available = new_item_form.cleaned_data.get("units_available"),
+				sale_start = new_item_form.cleaned_data.get("sale_start"),
+				sale_end = new_item_form.cleaned_data.get("sale_end"),
+				discount_start = new_item_form.cleaned_data.get("discount_start"),
+				discount_end = new_item_form.cleaned_data.get("discount_end"),
 				details = new_item_form.cleaned_data.get("details")
 			).save()
 
-			return HttpResponseRedirect("/account/")
+			return HttpResponseRedirect("/account/user_items/")
 	else:
 		new_item_form = NewItemForm()
 	
@@ -84,7 +93,7 @@ def add_item_images(request, itemID):
 					alt = new_image_form.cleaned_data.get("alt")
 				).save()
 				
-				return HttpResponseRedirect("/account/")
+				return HttpResponseRedirect("/account/user_items/")
 		else:
 			new_image_form = NewImageForm()
 	else:

@@ -13,14 +13,7 @@
             information.
         </p>
         {% if user.is_authenticated %}
-            <h2>Item Details (Example)</h2>
-            <p>Item Name:</p>
-            <p>Cost Per Item:</p>
-            <p>Total Items Available:</p>
-            <p>Time Until Sale End:</p>
-            <p>Time Until Discount End (If Applicable):</p>
-            <p>Item Image: <label for="fileUpload" class="button">Upload Item Image</label></p>
-            <input type="file" id="fileUpload" class="show-for-sr">
+            {% include 'sub_templates/user_items.html' %}
         {% else %}
             <p>Please log in to view your items.</p>
         {% endif %}

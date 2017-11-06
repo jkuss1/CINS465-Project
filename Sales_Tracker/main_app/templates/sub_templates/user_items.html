@@ -1,16 +1,28 @@
 {% if user.is_authenticated %}
-	<h2>Your Items</h2>
 	{% for user_item in user_items %}
 		<div class="item-cont">
-			<h3>{{ user_item.name }}</h3>
-			<p>Cost: ${{ user_item.cost }}</p>
-			<p>Price: ${{ user_item.price }}</p>
-			<p>{{ user_item.details }}</p>
-			
-			{% if user_item.image_set %}
-				<img src="{{ user_item.image_set.0.file.url }}" alt="{{ user_item.image_set.0.alt }}">
+			<h2>Item (Example)</h2>
+			<p>Item Name: {{ user_item.name }}</p>
+			<p>Item Details: {{ user_item.details }}</p>
+			<p>Cost Per Item: {{ user_item.cost }}</p>
+			<p>Total Items Available: {{ user_item.units_available }}</p>
+
+			{% if user_item.sale_start and user_item.sale_end %}
+				<p>Sale Start: {{ user_item.sale_start }}</p>
+				<p>Sale End: {{ user_item.sale_end }}</p>
 			{% endif %}
-			<a href="{% url 'add_item_images' user_item.id %}">Add Images</a>
+
+			{% if user_item.discount_start and user_item.discount_end %}
+				<p>Discount Start: {{ user_item.discount_start }}</p>
+				<p>Discount End: {{ user_item.discount_end }}</p>
+			{% endif %}
+
+			<p>Item Image(s):</p>
+			{% if user_item.images %}
+				<img src="{{ user_item.images.0.file.url }}" alt="{{ user_item.images.0.alt }}">
+			{% else %}
+				<a class="button" href="{% url 'add_item_images' user_item.id %}">Upload Item Image</a>
+			{% endif %}
 		</div>
 	{% endfor %}
 {% endif %}

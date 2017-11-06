@@ -4,4 +4,8 @@ from .models import *
 
 # Register your models here.
 admin.site.register(Item)
-admin.site.register(ItemImage)
+
+admin.site.register(
+	ItemImage,
+	list_display = ['alt', 'item']
+)

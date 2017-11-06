@@ -5,6 +5,8 @@ from django.contrib.auth.models import User
 from .models import *
 
 MONEY_PLACEHOLDER = "12.34"
+DATETIME_FORMATS = ["%Y-%m-%d %H:%M"]
+DATETIME_PLACEHOLDER = "YYYY-mm-dd HH:MM (24-Hour Time Format)"
 
 class NewItemForm(forms.ModelForm):
 	name = forms.CharField(
@@ -31,6 +33,46 @@ class NewItemForm(forms.ModelForm):
 		)
 	)
 
+	sale_start = forms.DateTimeField(
+		input_formats = DATETIME_FORMATS,
+		required = False,
+		widget = forms.DateTimeInput(
+			attrs = {
+				'placeholder': DATETIME_PLACEHOLDER
+			}
+		)
+	)
+	
+	sale_end = forms.DateTimeField(
+		input_formats = DATETIME_FORMATS,
+		required = False,
+		widget = forms.DateTimeInput(
+			attrs = {
+				'placeholder': DATETIME_PLACEHOLDER
+			}
+		)
+	)
+
+	discount_start = forms.DateTimeField(
+		input_formats = DATETIME_FORMATS,
+		required = False,
+		widget = forms.DateTimeInput(
+			attrs = {
+				'placeholder': DATETIME_PLACEHOLDER
+			}
+		)
+	)
+	
+	discount_end = forms.DateTimeField(
+		input_formats = DATETIME_FORMATS,
+		required = False,
+		widget = forms.DateTimeInput(
+			attrs = {
+				'placeholder': DATETIME_PLACEHOLDER
+			}
+		)
+	)
+	
 	class Meta:
 		model = Item
 		exclude = ["user"]
