@@ -30,20 +30,20 @@ body {
     background: SteelBlue;
 }
 
-body.home {
-	background-image: url("https://i.imgur.com/cVQG8a0.png");
+body.home {	
+    background: linear-gradient( rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4) ), url("https://i.imgur.com/cVQG8a0.png");
 }
 
 body.input {
-	background-image: url("https://i.imgur.com/paAkoAn.png");
+	background: linear-gradient( rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4) ), url("https://i.imgur.com/paAkoAn.png");
 }
 
 body.data {
-	background-image: url("https://i.imgur.com/VqeWR5L.png");
+	background: linear-gradient( rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4) ), url("https://i.imgur.com/VqeWR5L.png");
 }
 
 body.info {
-	background-image: url("https://i.imgur.com/rvPX85F.png");
+	background: linear-gradient( rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4) ), url("https://i.imgur.com/rvPX85F.png");
 }
 
 #calc-btn {
