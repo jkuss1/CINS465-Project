@@ -46,6 +46,10 @@ body.info {
 	background: linear-gradient( rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4) ), url("https://i.imgur.com/rvPX85F.png");
 }
 
+body.contact {
+	background: linear-gradient( rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4) ), url("https://i.imgur.com/8dkvWKw.png");
+}
+
 #calc-btn {
 	position: fixed;
 	left: 5px;

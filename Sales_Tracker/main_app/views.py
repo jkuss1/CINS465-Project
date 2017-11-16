@@ -50,6 +50,10 @@ def sales_info(request):
 	return render(request, 'account/sales_info.html')
 
 @login_required
+def contact_us(request):
+	return render(request, 'account/contact_us.html')
+
+@login_required
 def add_item(request):
 	if request.method == "POST" and request.user.is_authenticated:
 		new_item_form = NewItemForm(request.POST)

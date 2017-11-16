@@ -11,4 +11,5 @@ urlpatterns = [
 	url(r'^account/user_items/$', views.user_items, name="user_items"),
 	url(r'^account/sales_data/$', views.sales_data, name="sales_data"),
 	url(r'^account/sales_info/$', views.sales_info, name="sales_info"),
+	url(r'^account/contact_us/$', views.contact_us, name="contact_us"),
 ]
