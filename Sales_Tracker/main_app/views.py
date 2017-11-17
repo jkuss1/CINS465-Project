@@ -43,7 +43,30 @@ def user_items(request):
 
 @login_required
 def sales_data(request):
-	return render(request, 'account/sales_data.html')
+	items = GET_USER_ITEMS(request.user)
+
+	user_items = []
+
+	for item in items:
+		revenue = item.units_sold * item.price
+		cost = item.units_purchased * item.cost
+		profit = revenue - cost
+		
+		user_items.append({
+			'id': item.id,
+			'name': item.name,
+			'units_sold': item.units_sold,
+			'revenue': revenue,
+			'cost': cost,
+			'profit': profit,
+			'images': item.images
+		})
+	
+	context = {
+		'user_items': user_items
+	}
+
+	return render(request, 'account/sales_data.html', context)
 
 @login_required
 def sales_info(request):

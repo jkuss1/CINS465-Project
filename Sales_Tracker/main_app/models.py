@@ -23,16 +23,24 @@ class Item(models.Model):
 	cost = models.DecimalField(
 		max_digits = 12,
 		decimal_places = 2,
-		null = True
+		default = 0.00
 	)
 	
 	price = models.DecimalField(
 		max_digits = 12,
 		decimal_places = 2,
-		null = True
+		default = 0.00
+	)
+
+	units_purchased = models.IntegerField(
+		default = 0
 	)
 
 	units_available = models.IntegerField(
+		default = 0
+	)
+
+	units_sold = models.IntegerField(
 		default = 0
 	)
 
