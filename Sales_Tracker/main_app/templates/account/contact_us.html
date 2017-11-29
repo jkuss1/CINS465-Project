@@ -12,9 +12,18 @@
 			you have an issues or questions regarding the site. One of our employees will
 			get into contact with 3-5 business days.
         </p>
-        <p>
-			<textarea name="message" rows="10" cols="30">Input your message here.</textarea> 
-        </p>
-		<input type="submit" value="Submit">
-	</body>
+
+        {% if success == 1 %}
+            <h3 class="text-green text-center">Message Sent</h3>
+        {% elif success == 0 %}
+            <h3 class="text-red text-center">Message Failed to Send</h3>
+        {% endif %}
+
+        <form method="post" action="{% url 'contact_us' %}">
+            {% csrf_token %}
+
+            {{ form }}
+            <input type="submit" value="Submit" class="button expanded"/>
+        </form>
+    </body>
 {% endblock %}

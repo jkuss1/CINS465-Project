@@ -90,3 +90,12 @@ $("#calc-close").click(function () {
 });
 
 dragElement(document.getElementById("calc"));
+
+
+function dateChange(self)
+{
+	if (self.value.match("/")) {
+		date = self.value.split("/");
+		self.value = date[2] + "-" + date[0] + "-" + date[1] + " 0:00";
+	}
+}

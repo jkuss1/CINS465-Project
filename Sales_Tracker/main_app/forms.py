@@ -33,12 +33,39 @@ class NewItemForm(forms.ModelForm):
 		)
 	)
 
+	units_purchased = forms.IntegerField(
+		widget = forms.NumberInput(
+			attrs = {
+				'placeholder': "0"
+			}
+		)
+	)
+
+	units_available = forms.IntegerField(
+		widget = forms.NumberInput(
+			attrs = {
+				'placeholder': "0"
+			}
+		)
+	)
+
+	units_sold = forms.IntegerField(
+		label = "Units Already Sold",
+		widget = forms.NumberInput(
+			attrs = {
+				'placeholder': "0"
+			}
+		)
+	)
+
 	sale_start = forms.DateTimeField(
 		input_formats = DATETIME_FORMATS,
 		required = False,
 		widget = forms.DateTimeInput(
 			attrs = {
-				'placeholder': DATETIME_PLACEHOLDER
+				'placeholder': DATETIME_PLACEHOLDER,
+				'class': "auto-kal",
+				'onchange': "dateChange(this)"
 			}
 		)
 	)
@@ -48,7 +75,9 @@ class NewItemForm(forms.ModelForm):
 		required = False,
 		widget = forms.DateTimeInput(
 			attrs = {
-				'placeholder': DATETIME_PLACEHOLDER
+				'placeholder': DATETIME_PLACEHOLDER,
+				'class': "auto-kal",
+				'onchange': "dateChange(this)"
 			}
 		)
 	)
@@ -58,7 +87,9 @@ class NewItemForm(forms.ModelForm):
 		required = False,
 		widget = forms.DateTimeInput(
 			attrs = {
-				'placeholder': DATETIME_PLACEHOLDER
+				'placeholder': DATETIME_PLACEHOLDER,
+				'class': "auto-kal",
+				'onchange': "dateChange(this)"
 			}
 		)
 	)
@@ -68,7 +99,9 @@ class NewItemForm(forms.ModelForm):
 		required = False,
 		widget = forms.DateTimeInput(
 			attrs = {
-				'placeholder': DATETIME_PLACEHOLDER
+				'placeholder': DATETIME_PLACEHOLDER,
+				'class': "auto-kal",
+				'onchange': "dateChange(this)"
 			}
 		)
 	)
@@ -89,6 +122,17 @@ class NewImageForm(forms.ModelForm):
 	class Meta:
 		model = ItemImage
 		exclude = ["item"]
+
+class ContactForm(forms.Form):
+	subject = forms.CharField()
+
+	text = forms.CharField(
+		widget = forms.Textarea(
+			attrs = {
+				'placeholder': "Type your message here..."
+			}
+		)
+	)
 
 class RegistrationForm(UserCreationForm):
 	email = forms.EmailField(

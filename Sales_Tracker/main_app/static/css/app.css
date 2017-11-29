@@ -1,3 +1,10 @@
+.text-green {color: green;}
+.text-red {color: red;}
+
+label {
+	color: white;
+}
+
 h1 {
     color: red;
 	font-size: 50px;
