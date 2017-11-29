@@ -84,7 +84,7 @@ def contact_us(request):
 					contact_form.cleaned_data.get('subject'),
 					contact_form.cleaned_data.get('text'),
 					request.user.email,
-					['jkuss@mail.csuchico.edu']
+					[User.objects.get(username='admin').email]
 				)
 
 				success = 1
