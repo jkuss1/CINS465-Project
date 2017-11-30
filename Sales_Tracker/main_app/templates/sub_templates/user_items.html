@@ -4,7 +4,7 @@
 			<h2>Item:</h2>
 			<h3>{{ user_item.name }}</h3>
 			{% if user_item.images %}
-				<img src="{{ user_item.images.0.file.url }}" alt="{{ user_item.images.0.alt }}"> <a class="button" href="{% url 'add_item_images' user_item.id %}">Update Item Image</a>
+				<img src="{{ user_item.images.0.file.url }}" alt="{{ user_item.images.0.alt }}"> <a class="button" href="{% url 'add_item_images' user_item.id %}">Update Item Image(s)</a>
 			{% else %}
 				<a class="button" href="{% url 'add_item_images' user_item.id %}">Upload Item Image</a>
 			{% endif %}

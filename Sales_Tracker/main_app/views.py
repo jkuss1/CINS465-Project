@@ -158,7 +158,8 @@ def add_item_images(request, itemID):
 	
 	context = {
 		'form': new_image_form,
-		'item': item
+		'item': item,
+		'item_images': ItemImage.objects.filter(item=item)
 	}
 
 	return render(request, 'account/add_item_images.html', context)
