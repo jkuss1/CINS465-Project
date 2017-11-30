@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'channels',
     'main_app',
 ]
 
@@ -126,15 +127,22 @@ STATICFILES_DIR = [
     os.path.join(BASE_DIR, 'assets'),
 ]
 
+MEDIA_ROOT = os.path.join(BASE_DIR, 'user_media')
+MEDIA_URL = '/media/'
+
 
 # Login Settings
 LOGIN_REDIRECT_URL = '/account/'
 
 
-# Media Settings
-MEDIA_ROOT = os.path.join(BASE_DIR, 'user_media')
-MEDIA_URL = '/media/'
-
-
 # Email Settings
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+
+# Channels Settings
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'asgi_redis.RedisChannelLayer',
+        'ROUTING': 'main_app.routing.channel_routing'
+    }
+}
