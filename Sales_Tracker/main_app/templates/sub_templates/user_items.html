@@ -1,25 +1,43 @@
 {% if user.is_authenticated %}
 	{% for user_item in user_items %}
 		<div class="item-cont">
-			<h2>Item:</h2>
 			<h3>{{ user_item.name }}</h3>
-			{% if user_item.images %}
-				<img src="{{ user_item.images.0.file.url }}" alt="{{ user_item.images.0.alt }}"> <a class="button" href="{% url 'add_item_images' user_item.id %}">Update Item Image(s)</a>
-			{% else %}
-				<a class="button" href="{% url 'add_item_images' user_item.id %}">Upload Item Image</a>
-			{% endif %}
-			<p><strong>Item Details:</strong> {{ user_item.details }} &emsp;&emsp;&emsp; 
-			<strong>Cost Per Item:</strong> ${{ user_item.cost }} &emsp;&emsp;&emsp; 
-			<strong>Total Items Available:</strong> {{ user_item.units_available }}</p>
+			
+			{% for image_tuple in user_item.images %}
+				{% if forloop.counter <= 3 %}
+					<img class="img-cont" src="{{ image_tuple.0 }}" alt="{{ image_tuple.1 }}">
+				{% endif %}
+			{% endfor %}
+			<a class="button" href="{% url 'add_item_images' user_item.id %}">Upload Item Image(s)</a>
+			
+			<p>
+				<strong>Item Details:</strong>{{ user_item.details }}&emsp;&emsp;&emsp;
+				<strong>Cost Per Item:</strong>${{ user_item.cost }}&emsp;&emsp;&emsp;
+				<strong>Total Items Available:</strong>{{ user_item.units_available }}
+			</p>
+			
 			{% if user_item.sale_start and user_item.sale_end %}
-				<p><strong>Sale Start:</strong> {{ user_item.sale_start }}&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp; 
-				<strong>Sale End:</strong> {{ user_item.sale_end }}</p>
+				<p>
+					<strong>Sale Start:</strong>{{ user_item.sale_start }}&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+					<strong>Sale End:</strong>{{ user_item.sale_end }}
+				</p>
 			{% endif %}
+			
 			{% if user_item.discount_start and user_item.discount_end %}
-				<p><strong>Discount Start:</strong> {{ user_item.discount_start }}&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
-				<strong>Discount End:</strong> {{ user_item.discount_end }}</p>
+				<p>
+					<strong>Discount Start:</strong>{{ user_item.discount_start }}&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+					<strong>Discount End:</strong>{{ user_item.discount_end }}
+				</p>
 			{% endif %}
-			<a class="button">Change Details</a> <a class="button">Delete Item</a>
+			
+			<a class="button" href="{% url 'index' %}">Edit Item</a>
+			
+			<form id="del-item-form" class="inline">
+				{% csrf_token %}
+				<input id="del-item-form-name" type="hidden" value="{{ user_item.name }}">
+				<input id="del-item-form-id" type="hidden" value="{{ user_item.id }}">
+				<input type="submit" class="button bg-red" value="Delete Item">
+			</form>
 		</div>
 	{% endfor %}
 {% endif %}

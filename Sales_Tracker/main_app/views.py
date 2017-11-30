@@ -1,7 +1,7 @@
 from django.core.mail import send_mail
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse, HttpResponseRedirect
+from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 
 from .models import *
@@ -11,9 +11,13 @@ from .forms import *
 def GET_USER_ITEMS(user):
 	if user.is_authenticated:
 		items = Item.objects.filter(user=user)
-
+		
 		for item in items:
-			item.images = ItemImage.objects.filter(item=item)
+			item.images = []
+			images = ItemImage.objects.filter(item=item)
+			
+			for image in images:
+				item.images.append((image.file.url, image.alt))
 		
 		return items
 
@@ -163,6 +167,19 @@ def add_item_images(request, itemID):
 	}
 
 	return render(request, 'account/add_item_images.html', context)
+
+@login_required
+def delete_item(request, itemID):
+	if request.method == 'POST':
+		item = Item.objects.get(id=itemID)
+
+		if item.user == request.user:
+			item.delete()
+			return HttpResponse(status=200)
+		else:
+			return HttpResponse(status=403)
+	else:
+		return HttpResponse(status=405)
 
 def register(request):
 	if request.method == 'POST':

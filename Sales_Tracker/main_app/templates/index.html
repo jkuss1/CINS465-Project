@@ -7,10 +7,15 @@
 {% block content %}
 	<body class="home">
 		<h1 class="text-center">Sales Tracker Home Page</h1>
-		{% include 'sub_templates/user_items.html' %}
+
+		<h2>Popular Items</h2>
+		<p>Popular items go here.</p>
+
+		<br><hr><br>
+
 		{% if user.is_authenticated %}
 			<h2>Your Items (Total Items)</h2>
-			<p>Your items go here.</p>
+			{% include 'sub_templates/user_items.html' %}
 		{% else %}
 			<p>
 				Welcome to Sales Tracker, where you we track your sales data and compile it
@@ -19,7 +24,5 @@
 				if you need assistance.
 			</p>
 		{% endif %}
-		<h2>Popular Items</h2>
-		<p>Popular items go here.</p>
 	</body>
 {% endblock %}

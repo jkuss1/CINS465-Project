@@ -8,6 +8,7 @@ urlpatterns = [
 	url(r'^account/$', views.account, name="account"),
 	url(r'^account/add_item/$', views.add_item, name="add_item"),
 	url(r'^account/add_item_images/(?P<itemID>[0-9]+)/$', views.add_item_images, name="add_item_images"),
+	url(r'^account/delete_item/(?P<itemID>[0-9]+)/$', views.delete_item, name="delete_item"),
 	url(r'^account/user_items/$', views.user_items, name="user_items"),
 	url(r'^account/sales_data/$', views.sales_data, name="sales_data"),
 	url(r'^account/sales_info/$', views.sales_info, name="sales_info"),

@@ -85,7 +85,7 @@ $(".calc-btn").click(function() {
 		calcInput.value += $(this).html();
 });
 
-$("#calc-close").click(function () {
+$("#calc-close").click(function() {
 	toggleCalculator();
 });
 
@@ -99,3 +99,24 @@ function dateChange(self)
 		self.value = date[2] + "-" + date[0] + "-" + date[1] + " 0:00";
 	}
 }
+
+
+$("#del-item-form").on("submit", function(e) {
+	e.preventDefault();
+
+	var name = $("#del-item-form-name").val();
+	
+	if (confirm("Delete \"" + name + "\"")) {
+		$.ajax({
+			'url': "http://" + window.location.host + "/account/delete_item/" + $("#del-item-form-id").val() + "/",
+			'type': "POST",
+			'data': $(this).serialize(),
+			'success': function() {
+				$("#del-item-form").parent().remove();
+			},
+			'error': function() {
+				alert("Unable to delete \"" + name + "\".\nPlease try again.");
+			}
+		})
+	}
+});

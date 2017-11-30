@@ -1,3 +1,5 @@
+.bg-red {background-color: darkred;}
+.bg-red:hover {background-color: red;}
 .text-green {color: green;}
 .text-red {color: red;}
 
@@ -104,3 +106,5 @@ body.contact {
 	width: 23%;
 	padding-right: 2%;
 }
+
+.inline {display: inline;}
