@@ -9,46 +9,64 @@ from .forms import *
 
 # FUNCTIONS #
 def GET_USER_ITEMS(user):
+	items = None
+	count = None
+	
 	if user.is_authenticated:
 		items = Item.objects.filter(user=user)
+		count = 0
 		
 		for item in items:
+			count = count + 1
 			item.images = []
 			images = ItemImage.objects.filter(item=item)
 			
 			for image in images:
 				item.images.append((image.file.url, image.alt))
-		
-		return items
+	
+	return items, count
+
+def GET_POPULAR_ITEMS():
+	return Item.objects.all().order_by('-units_sold')[:5]
 
 # VIEWS #
 def index(request):
+	user_items, num_user_items = GET_USER_ITEMS(request.user)
+	
 	context = {
-		'user_items': GET_USER_ITEMS(request.user)
+		'popular_items': GET_POPULAR_ITEMS(),
+		'user_items': user_items,
+		'num_user_items': num_user_items
 	}
 	
 	return render(request, 'index.html', context)
 
 @login_required
 def account(request):
+	user_items, num_user_items = GET_USER_ITEMS(request.user)
+
 	context = {
 		'username': request.user,
-		'user_items': GET_USER_ITEMS(request.user)
+		'user_items': user_items,
+		'num_user_items': num_user_items
 	}
 
 	return render(request, 'account/account.html', context)
 
 @login_required
 def user_items(request):
+	user_items, num_user_items = GET_USER_ITEMS(request.user)
+
 	context = {
-		'user_items': GET_USER_ITEMS(request.user)
+		'user_items': user_items,
+		'num_user_items': num_user_items
 	}
 
 	return render(request, 'account/user_items.html', context)
 
 @login_required
 def sales_data(request):
-	items = GET_USER_ITEMS(request.user)
+	items, num_user_items = GET_USER_ITEMS(request.user)
 
 	user_items = []
 
@@ -68,7 +86,8 @@ def sales_data(request):
 		})
 	
 	context = {
-		'user_items': user_items
+		'user_items': user_items,
+		'num_user_items': num_user_items
 	}
 
 	return render(request, 'account/sales_data.html', context)

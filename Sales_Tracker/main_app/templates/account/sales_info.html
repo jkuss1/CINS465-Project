@@ -9,25 +9,26 @@
         <h1 class="text-center">Sales Information</h1>
         <p>
             In Sales Information we transform data into information so you can
-            better succeed succeed in your business. Please make sure all data is up
+            better succeed in your business. Please make sure all data is up
             to date.
         </p>
+
+        <br><hr><br>
+
         {% if user.is_authenticated %}
-            <h2>Item Statistics (Example)</h2>
-            <p>Highest Selling Item:</p>
-            <p>Lowest Selling Item:</p>
+            <p>Highest Selling Item(s):</p>
+            <p>Lowest Selling Item(s):</p>
             <p>Total Items Sold:</p>
-            <p>Most Discounted Item:</p>
-            <p>Most Expensive Item:</p>
-            <p>Cheapest item:</p>
-            <p>Most Profitable Item:</p>
-            <p>Least Profitable Item:</p>
+            <p>Most Discounted Item(s):</p>
+            <p>Most Expensive Item(s):</p>
+            <p>Cheapest Item(s):</p>
+            <p>Most Profitable Item(s):</p>
+            <p>Least Profitable Item(s):</p>
             <p>Total Revenue For All Items:</p>
             <p>Most Profitable Month (average):</p>
             <p>Least Profitable Month (average):</p>
             <p>Total Cost For All Items:</p>
-            <p>Total Profit For All Items</p>
-            <p>Item Image: (Based on upload from User Items)</p>
+            <p>Total Profit For All Items:</p>
         {% else %}
             <p>Please log in to view your Sales Information.</p>
         {% endif %}

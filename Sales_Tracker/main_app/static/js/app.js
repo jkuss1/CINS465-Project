@@ -110,7 +110,7 @@ $("#del-item-form").on("submit", function(e) {
 		$.ajax({
 			'url': "http://" + window.location.host + "/account/delete_item/" + $("#del-item-form-id").val() + "/",
 			'type': "POST",
-			'data': $(this).serialize(),
+			'data': $("#del-item-form").serialize(),
 			'success': function() {
 				$("#del-item-form").parent().remove();
 			},

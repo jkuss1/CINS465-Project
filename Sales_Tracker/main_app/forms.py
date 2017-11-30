@@ -49,8 +49,7 @@ class NewItemForm(forms.ModelForm):
 		)
 	)
 
-	units_sold = forms.IntegerField(
-		label = "Units Already Sold",
+	units_previously_sold = forms.IntegerField(
 		widget = forms.NumberInput(
 			attrs = {
 				'placeholder': "0"
@@ -108,7 +107,7 @@ class NewItemForm(forms.ModelForm):
 	
 	class Meta:
 		model = Item
-		exclude = ["user"]
+		exclude = ['user', 'units_sold']
 
 class NewImageForm(forms.ModelForm):
 	file = forms.ImageField(

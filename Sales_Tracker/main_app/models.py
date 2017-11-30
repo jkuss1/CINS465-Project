@@ -40,6 +40,10 @@ class Item(models.Model):
 		default = 0
 	)
 
+	units_previously_sold = models.IntegerField(
+		default = 0
+	)
+
 	units_sold = models.IntegerField(
 		default = 0
 	)
