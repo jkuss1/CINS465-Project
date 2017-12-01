@@ -108,8 +108,8 @@ $("#del-item-form").on("submit", function(e) {
 	
 	if (confirm("Delete \"" + name + "\"")) {
 		$.ajax({
-			'url': "http://" + window.location.host + "/account/delete_item/" + $("#del-item-form-id").val() + "/",
 			'type': "POST",
+			'url': "http://" + window.location.host + "/account/delete_item/" + $("#del-item-form-id").val() + "/",
 			'data': $("#del-item-form").serialize(),
 			'success': function() {
 				$("#del-item-form").parent().remove();
@@ -120,3 +120,113 @@ $("#del-item-form").on("submit", function(e) {
 		})
 	}
 });
+
+var timeout;
+function searchItems(keyword)
+{
+	clearTimeout(timeout);
+	
+	timeout = setTimeout(function() {
+		var url;
+
+		if (keyword) {
+			url = "http://" + window.location.host + "/search_items/" + keyword + "/";
+		}
+		else {
+			url = "http://" + window.location.host + "/get_popular_items/";
+		}
+		
+		$.ajax({
+			'url': url,
+			'success': function(data) {
+				var json = JSON.parse(data);
+
+				var allItemsCont = document.getElementById("all-items-cont");
+				allItemsCont.innerHTML = "";
+
+				for (var i = 0; i < json.length; i++) {
+					var item = json[i];
+
+					var cont = document.createElement("div");
+					allItemsCont.appendChild(cont);
+					
+					var itemCont = document.createElement("div");
+					itemCont.classList.add("item-cont");
+					cont.appendChild(itemCont);
+
+					var name = document.createElement("h3");
+					name.innerHTML = item.name;
+					itemCont.appendChild(name);
+					
+					for (var j = 0; j < item.images.length; j++) {
+						var image = item.images[j];
+						
+						var img = document.createElement("img");
+						img.classList.add("img-cont");
+						img.src = image.url;
+						img.alt = image.alt;
+						itemCont.appendChild(img);
+					}
+
+					var p = document.createElement("p");
+					itemCont.appendChild(p);
+
+					var strong = document.createElement("strong");
+					strong.innerHTML = "Item Details: "
+					p.appendChild(strong);
+					
+					p.innerHTML += item.details + "&emsp;&emsp;&emsp;";
+
+					strong = document.createElement("strong");
+					strong.innerHTML = "Cost Per Item: "
+					p.appendChild(strong);
+
+					p.innerHTML += item.cost + "&emsp;&emsp;&emsp;";
+					
+					strong = document.createElement("strong");
+					strong.innerHTML = "Total Available: "
+					p.appendChild(strong);
+					
+					p.innerHTML += item.units_available;
+
+					if (item.sale_start && item.sale_end) {
+						p = document.createElement("p");
+						itemCont.appendChild(p);
+
+						strong = document.createElement("strong");
+						strong.innerHTML = "Sale Start: "
+						p.appendChild(strong);
+						
+						p.innerHTML += item.sale_start + "&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;";
+
+						strong = document.createElement("strong");
+						strong.innerHTML = "Sale End: "
+						p.appendChild(strong);
+						
+						p.innerHTML += item.sale_end;
+					}
+
+					if (item.discount_start && item.discount_end) {
+						p = document.createElement("p");
+						itemCont.appendChild(p);
+
+						strong = document.createElement("strong");
+						strong.innerHTML = "Discount Start: "
+						p.appendChild(strong);
+						
+						p.innerHTML += item.discount_start + "&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;";
+
+						strong = document.createElement("strong");
+						strong.innerHTML = "Discount End: "
+						p.appendChild(strong);
+						
+						p.innerHTML += item.discount_end;
+					}
+
+					var hr = document.createElement("hr");
+					itemCont.appendChild(hr);
+				}
+			}
+		})
+	}, 500);
+}

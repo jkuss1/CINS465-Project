@@ -1,0 +1,35 @@
+<div id="all-items-cont">
+	{% for item in items %}
+		<div class="item-cont">
+			<h3>{{ item.name }}</h3>
+			
+			{% for image_tuple in item.images %}
+				{% if forloop.counter <= 3 %}
+					<img class="img-cont" src="{{ image_tuple.0 }}" alt="{{ image_tuple.1 }}">
+				{% endif %}
+			{% endfor %}
+			
+			<p>
+				<strong>Item Details:</strong> {{ item.details }}&emsp;&emsp;&emsp;
+				<strong>Cost Per Item:</strong> ${{ item.cost }}&emsp;&emsp;&emsp;
+				<strong>Total Available:</strong> {{ item.units_available }}
+			</p>
+			
+			{% if item.sale_start and item.sale_end %}
+				<p>
+					<strong>Sale Start:</strong> {{ item.sale_start }}&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+					<strong>Sale End:</strong> {{ item.sale_end }}
+				</p>
+			{% endif %}
+			
+			{% if item.discount_start and item.discount_end %}
+				<p>
+					<strong>Discount Start:</strong> {{ item.discount_start }}&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+					<strong>Discount End:</strong> {{ item.discount_end }}
+				</p>
+			{% endif %}
+		</div>
+		<hr>
+	{% endfor %}
+</div>
+<hr>

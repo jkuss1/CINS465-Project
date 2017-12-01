@@ -36,7 +36,8 @@ p {
 }
 
 body { 
-    background: SteelBlue;
+	background: SteelBlue;
+	padding-bottom: 64px;
 }
 
 body.home {	

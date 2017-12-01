@@ -1,3 +1,4 @@
+import json
 from django.core.mail import send_mail
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
@@ -19,27 +20,103 @@ def GET_USER_ITEMS(user):
 		for item in items:
 			count = count + 1
 			item.images = []
-			images = ItemImage.objects.filter(item=item)
 			
-			for image in images:
+			for image in ItemImage.objects.filter(item=item):
 				item.images.append((image.file.url, image.alt))
 	
 	return items, count
 
-def GET_POPULAR_ITEMS():
-	return Item.objects.all().order_by('-units_sold')[:5]
+def GET_ITEMS(start=0, end=25):
+	items = Item.objects.all().order_by('-units_sold')[start:end]
+
+	for item in items:
+		item.images = []
+		
+		for image in ItemImage.objects.filter(item=item):
+			item.images.append((image.file.url, image.alt))
+	
+	return items
 
 # VIEWS #
 def index(request):
 	user_items, num_user_items = GET_USER_ITEMS(request.user)
 	
 	context = {
-		'popular_items': GET_POPULAR_ITEMS(),
+		'items': GET_ITEMS(0, 5),
 		'user_items': user_items,
 		'num_user_items': num_user_items
 	}
 	
 	return render(request, 'index.html', context)
+
+def all_items(request):
+	context = {
+		'items': GET_ITEMS()
+	}
+	
+	return render(request, 'all_items.html', context)
+
+def get_popular_items(request):
+	items = GET_ITEMS()
+	data = []
+
+	for item in items:
+		itemData = {
+			'name': item.name,
+			'cost': float(item.cost),
+			'units_available': item.units_available,
+			'details': item.details,
+			'sale_start': str(item.sale_start),
+			'sale_end': str(item.sale_end),
+			'discount_start': str(item.discount_start),
+			'discount_end': str(item.discount_end),
+			'images': []
+		}
+		
+		for img in ItemImage.objects.filter(item=item):
+			itemData['images'].append({
+				'url': img.file.url,
+				'alt': img.alt
+			})
+
+		data.append(itemData)
+	
+	if data:
+		return HttpResponse(json.dumps(data))
+	else:
+		return HttpResponse(status=404)
+
+def search_items(request, keyword):
+	print(keyword)
+	items = Item.objects.all()
+	data = []
+
+	for item in items:
+		if item.name.lower().startswith(keyword.lower()):
+			itemData = {
+				'name': item.name,
+				'cost': float(item.cost),
+				'units_available': item.units_available,
+				'details': item.details,
+				'sale_start': str(item.sale_start),
+				'sale_end': str(item.sale_end),
+				'discount_start': str(item.discount_start),
+				'discount_end': str(item.discount_end),
+				'images': []
+			}
+			
+			for img in ItemImage.objects.filter(item=item):
+				itemData['images'].append({
+					'url': img.file.url,
+					'alt': img.alt
+				})
+
+			data.append(itemData)
+	
+	if data:
+		return HttpResponse(json.dumps(data))
+	else:
+		return HttpResponse(status=404)
 
 @login_required
 def account(request):
@@ -95,39 +172,6 @@ def sales_data(request):
 @login_required
 def sales_info(request):
 	return render(request, 'account/sales_info.html')
-
-@login_required
-def contact_us(request):
-	if request.method == 'POST':
-		contact_form = ContactForm(request.POST)
-
-		if contact_form.is_valid():
-			try:
-				send_mail(
-					contact_form.cleaned_data.get('subject'),
-					contact_form.cleaned_data.get('text'),
-					request.user.email,
-					[User.objects.get(username='admin').email]
-				)
-
-				success = 1
-			except:
-				success = 0
-
-			context = {
-				'form': ContactForm(),
-				'success': success
-			}
-			
-			return render(request, 'account/contact_us.html', context)
-	else:
-		contact_form = ContactForm()
-	
-	context = {
-		'form': contact_form
-	}
-
-	return render(request, 'account/contact_us.html', context)
 
 @login_required
 def add_item(request):
@@ -199,6 +243,39 @@ def delete_item(request, itemID):
 			return HttpResponse(status=403)
 	else:
 		return HttpResponse(status=405)
+
+@login_required
+def contact_us(request):
+	if request.method == 'POST':
+		contact_form = ContactForm(request.POST)
+
+		if contact_form.is_valid():
+			try:
+				send_mail(
+					contact_form.cleaned_data.get('subject'),
+					contact_form.cleaned_data.get('text'),
+					request.user.email,
+					[User.objects.get(username='admin').email]
+				)
+
+				success = 1
+			except:
+				success = 0
+
+			context = {
+				'form': ContactForm(),
+				'success': success
+			}
+			
+			return render(request, 'account/contact_us.html', context)
+	else:
+		contact_form = ContactForm()
+	
+	context = {
+		'form': contact_form
+	}
+
+	return render(request, 'account/contact_us.html', context)
 
 def register(request):
 	if request.method == 'POST':
