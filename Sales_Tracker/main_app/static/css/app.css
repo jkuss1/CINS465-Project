@@ -1,7 +1,11 @@
 .bg-red {background-color: darkred;}
 .bg-red:hover {background-color: red;}
+.bg-green {background-color: darkgreen;}
+.bg-green:hover {background-color: green;}
 .text-green {color: green;}
 .text-red {color: red;}
+
+.inline {display: inline;}
 
 label {
 	color: white;
@@ -108,4 +112,26 @@ body.contact {
 	padding-right: 2%;
 }
 
-.inline {display: inline;}
+#chat-cont {
+	display: none;
+	width: 350px;
+	position: fixed;
+	right: 0;
+	bottom: 0;
+	background-color: lightgray;
+}
+
+.chat-small {
+	height: 40px;
+}
+
+.chat-large {
+	height: 300px;
+}
+
+#chat-header {
+	text-align: center;
+	background-color: darkgray;
+	font-size: 1.3em;
+	line-height: 40px;
+}

@@ -2,6 +2,7 @@
 	{% for item in items %}
 		<div class="item-cont">
 			<h3>{{ item.name }}</h3>
+			<p>Seller: {{ item.user.username }}</p>
 			
 			{% for image_tuple in item.images %}
 				{% if forloop.counter <= 3 %}
@@ -38,6 +39,12 @@
 					{% csrf_token %}
 					<input id="add-to-cart-form-{{ item.id }}-btn" type="submit" class="button" value="Add to Cart">
 				</form>
+				
+				{% if seller_online %}
+					<button class="button bg-green" onclick="startChat('{{ item.user.username }}')">Chat with User</button>
+				{% else %}
+					<button class="button bg-green">Email Seller</button>
+				{% endif %}
 			{% endif %}
 		</div>
 		<hr>

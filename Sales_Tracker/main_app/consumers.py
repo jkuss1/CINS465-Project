@@ -30,24 +30,39 @@ class Consumer(JsonWebsocketConsumer):
 			message.reply_channel.send({'close': True})
 			Group('ALL').discard(message.reply_channel)
 	
-	def recieve(self, content, **kwargs):
-		event = content.get('event')
-
-		print()
-		print(event)
-		print()
-
-		if event == 0:
-			username = content.get('username')
-
-			print()
-			print(consumers[username])
-			print()
-
-			consumers[username].send({
-				'text': json.dumps({
-					'event': 1,
-					'userFor': username,
-					'userFrom': self.user.username
+	def receive(self, content, **kwargs):
+		if self.message.user.username:
+			event = content.get('event')
+			
+			if event == 0:
+				user_for = content.get('userFor')
+				
+				consumers.get(user_for).send({
+					'text': json.dumps({
+						'event': 1,
+						'userFor': user_for,
+						'userFrom': self.message.user.username
+					})
 				})
-			})
+			
+			elif event == 100:
+				user_for = content.get('userFor')
+
+				consumers.get(user_for).send({
+					'text': json.dumps({
+						'event': 101,
+						'userFor': user_for,
+						'userFrom': self.message.user.username
+					})
+				})
+			
+			elif event == 110:
+				username = content.get('username')
+				
+				consumers.get(username).send({
+					'text': json.dumps({
+						'event': 111,
+						'userFor': username,
+						'userFrom': self.message.user.username
+					})
+				})

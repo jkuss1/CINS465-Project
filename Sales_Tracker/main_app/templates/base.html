@@ -77,6 +77,12 @@
 			<br/>
 		</div>
 		<!-- [END] Calculator -->
+
+		<!-- Chat -->
+		<div id="chat-cont">
+			<div id="chat-header"></div>
+		</div>
+		<!-- [END] Chat -->
 		
 		<div class="grid-container">
 			{% block content %}{% endblock %}
@@ -88,7 +94,7 @@
 		<script src="{% static 'js/app.js' %}"></script>
 		<script src="{% static 'js/websocket.js' %}"></script>
 		<script>
-			var username = "{{ username }}";
+			var curUsername = "{{ username }}";
 		</script>
 		{% block scripts %}{% endblock %}
 	</body>

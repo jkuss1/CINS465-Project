@@ -89,7 +89,8 @@ def index(request):
 def all_items(request):
 	context = {
 		'username': request.user.username,
-		'items': GET_ITEMS()
+		'items': GET_ITEMS(),
+		'seller_online': True
 	}
 	
 	return render(request, 'all_items.html', context)
@@ -224,7 +225,26 @@ def sales_data(request):
 
 @login_required
 def sales_info(request):
-	return render(request, 'account/sales_info.html')
+	items = Item.objects.filter(user=request.user)
+	
+	items_sold = items.order_by('-units_sold')
+	highest_selling_items = []
+	
+	if len(items_sold) > 1:
+		for i in range(0, len(items_sold)):
+			if i + 1 < len(items_sold):
+				if items_sold[i].units_sold > items_sold[i + 1].units_sold:
+					highest_selling_items.append(items_sold[i])
+				else:
+					highest_selling_items.append(items_sold[i + 1])
+	elif len(items_sold) == 1:
+		highest_selling_items.append(items_sold[0])
+	
+	context = {
+		'highest_selling_items': highest_selling_items
+	}
+
+	return render(request, 'account/sales_info.html', context)
 
 @login_required
 def add_item(request):

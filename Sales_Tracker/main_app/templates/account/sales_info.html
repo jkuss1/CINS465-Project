@@ -16,7 +16,17 @@
         <br><hr><br>
 
         {% if user.is_authenticated %}
-            <p>Highest Selling Item(s):</p>
+            <p>
+                Highest Selling Item(s): 
+                {% for item in highest_selling_items %}
+                    {% if forloop.counter > 1 %}
+                        , {{ item.name }}
+                    {% else %}
+                        {{ item.name }}
+                    {% endif %}
+                {% endfor %}
+            </p>
+
             <p>Lowest Selling Item(s):</p>
             <p>Total Items Sold:</p>
             <p>Most Discounted Item(s):</p>
