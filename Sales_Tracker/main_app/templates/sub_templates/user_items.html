@@ -11,31 +11,33 @@
 			<a class="button" href="{% url 'add_item_images' user_item.id %}">Upload Item Image(s)</a>
 			
 			<p>
-				<strong>Item Details:</strong> {{ user_item.details }}&emsp;&emsp;&emsp;
-				<strong>Cost Per Item:</strong> ${{ user_item.cost }}&emsp;&emsp;&emsp;
+				<strong>Item Details:</strong> {{ user_item.details }}
+				<br>
+				<strong>Cost Per Item:</strong> ${{ user_item.cost }}
+				<br>
 				<strong>Total Items Available:</strong> {{ user_item.units_available }}
 			</p>
 			
 			{% if user_item.sale_start and user_item.sale_end %}
 				<p>
-					<strong>Sale Start:</strong> {{ user_item.sale_start }}&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+					<strong>Sale Start:</strong> {{ user_item.sale_start }}
+					<br>
 					<strong>Sale End:</strong> {{ user_item.sale_end }}
 				</p>
 			{% endif %}
 			
 			{% if user_item.discount_start and user_item.discount_end %}
 				<p>
-					<strong>Discount Start:</strong> {{ user_item.discount_start }}&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+					<strong>Discount Start:</strong> {{ user_item.discount_start }}
+					<br>
 					<strong>Discount End:</strong> {{ user_item.discount_end }}
 				</p>
 			{% endif %}
 			
 			<a class="button" href="{% url 'index' %}">Edit Item</a>
 			
-			<form id="del-item-form" class="inline">
+			<form id="del-item-form-{{ user_item.id }}-{{ user_item.name }}" class="inline" onsubmit="return deleteItem(this)">
 				{% csrf_token %}
-				<input id="del-item-form-name" type="hidden" value="{{ user_item.name }}">
-				<input id="del-item-form-id" type="hidden" value="{{ user_item.id }}">
 				<input type="submit" class="button bg-red" value="Delete Item">
 			</form>
 			<hr>

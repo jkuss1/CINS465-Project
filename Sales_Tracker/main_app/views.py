@@ -8,7 +8,43 @@ from django.shortcuts import render
 from .models import *
 from .forms import *
 
+# CONSTANTS #
+MONTH_NUM_TO_NAME = {
+	1: 'Jan',
+	2: 'Feb',
+	3: 'Mar',
+	4: 'Apr',
+	5: 'May',
+	6: 'Jun',
+	7: 'Jul',
+	8: 'Aug',
+	9: 'Sep',
+	10: 'Oct',
+	11: 'Nov',
+	12: 'Dec'
+}
+
 # FUNCTIONS #
+def GET_FORMATTED_TIME(datetime_model):
+	if datetime_model:
+		utc = str(datetime_model).split(' ')
+		
+		date = utc[0].split("-")
+		date = MONTH_NUM_TO_NAME[int(date[1])] + ". " + str(int(date[2])) + ", " + date[0] + ","
+		
+		time = utc[1].split(":")
+		
+		if int(time[1]) >= 12:
+			am_pm = "p.m."
+		else:
+			am_pm = "a.m."
+		
+		time = time[0] + ":" + time[1] + " " + am_pm
+		
+		return date + " " + time
+	else:
+		return ""
+
 def GET_USER_ITEMS(user):
 	items = None
 	count = None
@@ -42,6 +78,7 @@ def index(request):
 	user_items, num_user_items = GET_USER_ITEMS(request.user)
 	
 	context = {
+		'username': request.user.username,
 		'items': GET_ITEMS(0, 5),
 		'user_items': user_items,
 		'num_user_items': num_user_items
@@ -51,6 +88,7 @@ def index(request):
 
 def all_items(request):
 	context = {
+		'username': request.user.username,
 		'items': GET_ITEMS()
 	}
 	
@@ -60,17 +98,24 @@ def get_popular_items(request):
 	items = GET_ITEMS()
 	data = []
 
+	if request.user.is_authenticated:
+		logged_in = "true"
+	else:
+		logged_in = ""
+
 	for item in items:
 		itemData = {
+			'id': item.id,
 			'name': item.name,
 			'cost': float(item.cost),
-			'units_available': item.units_available,
+			'unitsAvailable': item.units_available,
 			'details': item.details,
-			'sale_start': str(item.sale_start),
-			'sale_end': str(item.sale_end),
-			'discount_start': str(item.discount_start),
-			'discount_end': str(item.discount_end),
-			'images': []
+			'saleStart': GET_FORMATTED_TIME(item.sale_start),
+			'saleEnd': GET_FORMATTED_TIME(item.sale_end),
+			'discountStart': GET_FORMATTED_TIME(item.discount_start),
+			'discountEnd': GET_FORMATTED_TIME(item.discount_end),
+			'images': [],
+			'loggedIn': logged_in
 		}
 		
 		for img in ItemImage.objects.filter(item=item):
@@ -87,22 +132,28 @@ def get_popular_items(request):
 		return HttpResponse(status=404)
 
 def search_items(request, keyword):
-	print(keyword)
 	items = Item.objects.all()
 	data = []
+
+	if request.user.is_authenticated:
+		logged_in = "true"
+	else:
+		logged_in = ""
 
 	for item in items:
 		if item.name.lower().startswith(keyword.lower()):
 			itemData = {
+				'id': item.id,
 				'name': item.name,
 				'cost': float(item.cost),
-				'units_available': item.units_available,
+				'unitsAvailable': item.units_available,
 				'details': item.details,
-				'sale_start': str(item.sale_start),
-				'sale_end': str(item.sale_end),
-				'discount_start': str(item.discount_start),
-				'discount_end': str(item.discount_end),
-				'images': []
+				'saleStart': GET_FORMATTED_TIME(item.sale_start),
+				'saleEnd': GET_FORMATTED_TIME(item.sale_end),
+				'discountStart': GET_FORMATTED_TIME(item.discount_start),
+				'discountEnd': GET_FORMATTED_TIME(item.discount_end),
+				'images': [],
+				'loggedIn': logged_in
 			}
 			
 			for img in ItemImage.objects.filter(item=item):
@@ -123,7 +174,7 @@ def account(request):
 	user_items, num_user_items = GET_USER_ITEMS(request.user)
 
 	context = {
-		'username': request.user,
+		'username': request.user.username,
 		'user_items': user_items,
 		'num_user_items': num_user_items
 	}
@@ -135,6 +186,7 @@ def user_items(request):
 	user_items, num_user_items = GET_USER_ITEMS(request.user)
 
 	context = {
+		'username': request.user.username,
 		'user_items': user_items,
 		'num_user_items': num_user_items
 	}
@@ -163,6 +215,7 @@ def sales_data(request):
 		})
 	
 	context = {
+		'username': request.user.username,
 		'user_items': user_items,
 		'num_user_items': num_user_items
 	}
@@ -197,6 +250,7 @@ def add_item(request):
 		new_item_form = NewItemForm()
 	
 	context = {
+		'username': request.user.username,
 		'form': new_item_form
 	}
 
@@ -224,6 +278,7 @@ def add_item_images(request, itemID):
 		return HttpResponseRedirect('/account/')
 	
 	context = {
+		'username': request.user.username,
 		'form': new_image_form,
 		'item': item,
 		'item_images': ItemImage.objects.filter(item=item)
@@ -238,6 +293,92 @@ def delete_item(request, itemID):
 
 		if item.user == request.user:
 			item.delete()
+			return HttpResponse(status=200)
+		else:
+			return HttpResponse(status=403)
+	else:
+		return HttpResponse(status=405)
+
+@login_required
+def cart(request):
+	cart_item_ids = request.user.cart.item_ids.split(',')
+	items = []
+	num_items_in_cart = 0
+
+	for cart_item_id in cart_item_ids:
+		if cart_item_id:
+			num_items_in_cart = num_items_in_cart + 1
+			items.append(Item.objects.get(id=cart_item_id))
+	
+	context = {
+		'username': request.user.username,
+		'items': items,
+		'num_items_in_cart': num_items_in_cart
+	}
+
+	return render(request, 'account/cart.html', context)
+
+@login_required
+def checkout(request):
+	if request.method == 'POST':
+		cart = request.user.cart
+		item_ids = cart.item_ids.split(",")
+		items = []
+
+		for cart_item_id in item_ids:
+			if cart_item_id:
+				items.append(Item.objects.get(id=cart_item_id))
+		
+		cart.item_ids = ""
+		cart.save()
+		
+		context = {
+			'username': request.user.username,
+			'items': items
+		}
+		
+		return render(request, 'account/checkout.html', context)
+	else:
+		return HttpResponse(status=405)
+
+@login_required
+def add_to_cart(request, itemID):
+	if request.method == 'POST':
+		cart = request.user.cart
+		item_ids = cart.item_ids.split(',')
+		
+		for cart_item_id in item_ids:
+			if itemID == cart_item_id:
+				return HttpResponse(status=200)
+		
+		if cart.item_ids == "":
+			cart.item_ids = cart.item_ids + itemID
+		else:
+			cart.item_ids = cart.item_ids + "," + itemID
+		
+		cart.save()
+		
+		return HttpResponse(status=200)
+	else:
+		return HttpResponse(status=405)
+
+@login_required
+def delete_from_cart(request, item_id):
+	if request.method == 'POST':
+		cart = request.user.cart
+
+		if cart.user == request.user:
+			if cart.item_ids.find("," + item_id + ",") != -1:
+				cart.item_ids = cart.item_ids.replace("," + item_id, "")
+			elif cart.item_ids.find(item_id + ",") != -1:
+				cart.item_ids = cart.item_ids.replace(item_id + ",", "")
+			elif cart.item_ids.find("," + item_id) != -1:
+				cart.item_ids = cart.item_ids.replace("," + item_id, "")
+			else:
+				cart.item_ids = cart.item_ids.replace(item_id, "")
+			
+			cart.save()
+			
 			return HttpResponse(status=200)
 		else:
 			return HttpResponse(status=403)
@@ -263,6 +404,7 @@ def contact_us(request):
 				success = 0
 
 			context = {
+				'username': request.user.username,
 				'form': ContactForm(),
 				'success': success
 			}
@@ -283,6 +425,11 @@ def register(request):
 
 		if reg_form.is_valid():
 			user = reg_form.save()
+			
+			Cart.objects.create(
+				user = user
+			)
+			
 			user = authenticate(
 				username = reg_form.cleaned_data.get('username'),
 				password = reg_form.cleaned_data.get('password1')

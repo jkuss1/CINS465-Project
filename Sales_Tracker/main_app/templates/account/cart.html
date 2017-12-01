@@ -1,4 +1,17 @@
-<div id="all-items-cont">
+{% extends 'base.html' %}
+
+{% block title %}
+	{{ username }}'s Cart
+{% endblock%}
+
+{% block content %}
+	<h2 class="text-center">Your Cart (<span id="cart-num-items">{{ num_items_in_cart }}</span>)</h2>
+	
+	<form id="checkout-form" class="inline" method="post" onsubmit="return checkout(this)">
+		{% csrf_token %}
+		<input type="submit" class="button expanded" value="Checkout">
+	</form>
+
 	{% for item in items %}
 		<div class="item-cont">
 			<h3>{{ item.name }}</h3>
@@ -32,15 +45,13 @@
 					<strong>Discount End:</strong> {{ item.discount_end }}
 				</p>
 			{% endif %}
-
-			{% if user.is_authenticated %}
-				<form id="add-to-cart-form-{{ item.id }}" class="inline" onsubmit="return addToCart(this)">
-					{% csrf_token %}
-					<input id="add-to-cart-form-{{ item.id }}-btn" type="submit" class="button" value="Add to Cart">
-				</form>
-			{% endif %}
+			
+			<form id="del-from-cart-form-{{ item.id }}" class="inline" onsubmit="return delFromCart(this)">
+				{% csrf_token %}
+				<input type="submit" class="button bg-red" value="Delete from Cart">
+			</form>
+			<hr>
 		</div>
-		<hr>
 	{% endfor %}
-</div>
-<hr>
+	<hr>
+{% endblock %}

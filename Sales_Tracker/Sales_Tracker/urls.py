@@ -22,7 +22,7 @@ from django.contrib.auth import views
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'login/$', views.login, name="login"),
-    url(r'logout/$', views.logout, {'next_page': "/"}, name="logout"),
+    url(r'logout/$', views.logout, name="logout"),
     
     url(r'', include('main_app.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

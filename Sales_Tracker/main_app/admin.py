@@ -9,3 +9,5 @@ admin.site.register(
 	ItemImage,
 	list_display = ['alt', 'item']
 )
+
+admin.site.register(Cart)

@@ -26,11 +26,12 @@
 			<div class="top-bar-right">
 				<ul class="menu">
 					{% if user.is_authenticated %}
-						<li><a href="{% url 'add_item' %}">Add Item</a></li>
+						<li><a href="{% url 'cart' %}">Cart</a></li>
 						<ul class="dropdown menu" data-dropdown-menu>
 							<li>
-								<a href="{% url 'account' %}">Account</a>
+								<a>Account</a>
 								<ul class="menu">
+									<li><a href="{% url 'add_item' %}">Add New Item</a></li>
 									<li><a href="{% url 'user_items' %}">Your Items</a></li>
 									<li><a href="{% url 'sales_data' %}">Sales Data</a></li>
 									<li><a href="{% url 'sales_info' %}">Sales Information</a></li>
@@ -86,6 +87,9 @@
 		<script src="{% static 'js/vendor/foundation.min.js' %}"></script>
 		<script src="{% static 'js/app.js' %}"></script>
 		<script src="{% static 'js/websocket.js' %}"></script>
+		<script>
+			var username = "{{ username }}";
+		</script>
 		{% block scripts %}{% endblock %}
 	</body>
 </html>

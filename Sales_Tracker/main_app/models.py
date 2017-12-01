@@ -97,3 +97,15 @@ class ItemImage(models.Model):
 
 	def __str__(self):
 		return self.alt
+
+class Cart(models.Model):
+	user = models.OneToOneField(
+		User,
+		related_name = 'cart',
+		on_delete = models.CASCADE
+	)
+
+	item_ids = models.TextField()
+
+	def __str__(self):
+		return self.user.username

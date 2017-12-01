@@ -1,4 +1,15 @@
-<div id="all-items-cont">
+{% extends 'base.html' %}
+
+{% block title %}
+	Checkout
+{% endblock%}
+
+{% block content %}
+	<h1 class="text-center">Checked Out</h1>
+	<h3 class="text-center">You Purchased</h3>
+
+	<hr>
+
 	{% for item in items %}
 		<div class="item-cont">
 			<h3>{{ item.name }}</h3>
@@ -32,15 +43,8 @@
 					<strong>Discount End:</strong> {{ item.discount_end }}
 				</p>
 			{% endif %}
-
-			{% if user.is_authenticated %}
-				<form id="add-to-cart-form-{{ item.id }}" class="inline" onsubmit="return addToCart(this)">
-					{% csrf_token %}
-					<input id="add-to-cart-form-{{ item.id }}-btn" type="submit" class="button" value="Add to Cart">
-				</form>
-			{% endif %}
 		</div>
 		<hr>
 	{% endfor %}
-</div>
-<hr>
+	<hr>
+{% endblock %}

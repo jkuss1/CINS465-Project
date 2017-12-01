@@ -15,5 +15,9 @@ urlpatterns = [
 	url(r'^account/user_items/$', views.user_items, name="user_items"),
 	url(r'^account/sales_data/$', views.sales_data, name="sales_data"),
 	url(r'^account/sales_info/$', views.sales_info, name="sales_info"),
+	url(r'^account/cart/$', views.cart, name="cart"),
+	url(r'^account/add_to_cart/(?P<itemID>[0-9]+)/$', views.add_to_cart, name="add_to_cart"),
+	url(r'^account/delete_from_cart/(?P<item_id>[0-9]+)/$', views.delete_from_cart, name="delete_from_cart"),
+	url(r'^account/checkout/$', views.checkout, name="checkout"),
 	url(r'^account/contact_us/$', views.contact_us, name="contact_us"),
 ]
