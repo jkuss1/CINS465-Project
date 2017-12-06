@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+{% load static %}
+<html class="no-js" lang="en" dir="ltr">
+	<head>
+		<meta charset="UTF-8"/>
+		<meta http-equiv="x-ua-compatible" content="ie=edge"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+		<title>
+			{% block full_title %}
+				{% block title %}{% endblock %} &sdot; {{ website_name }}
+			{% endblock %}
+		</title>
+		<link rel="stylesheet" href="{% static 'css/foundation.min.css' %}"/>
+		<link rel="stylesheet" href="{% static 'css/app.css' %}"/>
+	</head>
+	<body>
+		<!-- Top Nav Bar -->
+		<nav class="top-bar">
+			<ul class="menu">
+				<li><a href="{% url 'index' %}">Sales Tracker</a></li>
+				{% if user.is_authenticated %}
+					<li><a href="{% url 'user_items' %}">User Items</a></li>
+					<li><a href="{% url 'sales_data' %}">Sales Data</a></li>
+					<li><a href="{% url 'sales_info' %}">Sales Information</a></li>
+					<li><a href="{% url 'contact_us' %}">Contact Us</a></li>
+				{% endif %}
+			</ul>
+			<div class="top-bar-right">
+				<ul class="menu">
+					{% if user.is_authenticated %}
+						<ul class="dropdown menu" data-dropdown-menu>
+							<li>
+								<a href="{% url 'account' %}">Account</a>
+								<ul class="menu">
+									<li><a href="{% url 'add_item' %}">Add Item</a></li>
+								</ul>
+							</li>
+							<a href="{% url 'logout' %}">Logout</a>
+						</ul>
+					{% else %}
+						<a href="{% url 'register' %}">Register</a>
+						<a href="{% url 'login' %}">Login</a>
+					{% endif %}
+				</ul>
+			</div>
+		</nav>
+		<!-- [END] Top Nav Bar -->
+		
+		<!-- Calculator -->
+		<input id="calc-btn" type="image" src="{% static 'media/icons/calculator-icon.png' %}" onclick="toggleCalculator()"/>
+		
+		<div id="calc">
+			<div id="calc-header">Calculator</div>
+			<span id="calc-close">X</span>
+			<input id="calc-input" type="text"/>
+			<button class="calc-btn">7</button>
+			<button class="calc-btn">8</button>
+			<button class="calc-btn">9</button>
+			<button class="calc-btn">*</button>
+			<br/>
+			<button class="calc-btn">4</button>
+			<button class="calc-btn">5</button>
+			<button class="calc-btn">6</button>
+			<button class="calc-btn">-</button>
+			<br/>
+			<button class="calc-btn">1</button>
+			<button class="calc-btn">2</button>
+			<button class="calc-btn">3</button>
+			<button class="calc-btn">+</button>
+			<br/>
+			<button class="calc-btn">0</button>
+			<button class="calc-btn">C</button>
+			<button class="calc-btn">=</button>
+			<button class="calc-btn">/</button>
+			<br/>
+		</div>
+		<!-- [END] Calculator -->
+		
+		<div class="grid-container">
+			{% block content %}{% endblock %}
+		</div>
+		
+		<script src="{% static 'js/vendor/jquery.js' %}"></script>
+		<script src="{% static 'js/vendor/what-input.js' %}"></script>
+		<script src="{% static 'js/vendor/foundation.min.js' %}"></script>
+		<script src="{% static 'js/app.js' %}"></script>
+		{% block scripts %}{% endblock %}
+	</body>
+</html>

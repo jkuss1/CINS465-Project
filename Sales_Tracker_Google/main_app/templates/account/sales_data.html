@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Sales Data
+{% endblock %}
+
+{% block content %}
+	<body class="data">
+        <h1 class="text-center">Sales Data</h1>
+        <p>
+            In Sales Data we keep track of the data for the items you have added.
+            Please make sure to update the data for your items so we can provide you
+            with accurate information.
+        </p>
+        {% if user.is_authenticated %}
+            <h2>Item Sales (Example)</h2>
+            {% for user_item in user_items %}
+                <p>Item Name: {{ user_item.name }}</p>
+                <p>Total Items Sold: {{ user_item.units_sold }}</p>
+                <p>Items Sold During Discount Period (If Applicable):</p>
+                <p>Most Popular During The Month Of:</p>
+                <p>Least Popular During The Month Of:</p>
+                <p>Total Revenue: {{ user_item.revenue }}</p>
+                <p>Total Cost: {{ user_item.cost }}</p>
+                <p>Profit: {{ user_item.profit }}</p>
+                <p>Item Image: (Based on upload from User Items)</p>
+                {% if user_item.images %}
+                    <img src="{{ user_item.images.0.file.url }}" alt="{{ user_item.images.0.alt }}">
+                {% else %}
+                    <a class="button" href="{% url 'add_item_images' user_item.id %}">Upload Item Image</a>
+                {% endif %}
+            {% endfor %}
+        {% else %}
+            <p>Please log in to view your Sales Data.</p>
+        {% endif %}
+	</body>
+{% endblock %}
