@@ -64,6 +64,18 @@ body.contact {
 	background: linear-gradient( rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4) ), url("https://i.imgur.com/8dkvWKw.png");
 }
 
+body.cart {
+	background: linear-gradient( rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4) ), url("https://i.imgur.com/g6e1kkR.png");
+}
+
+body.checkout {
+	background: linear-gradient( rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4) ), url("https://i.imgur.com/TnZndHp.jpg");
+}
+
+body.allitems {
+	background: linear-gradient( rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4) ), url("https://i.imgur.com/5dXWOCL.jpg");
+}
+
 #calc-btn {
 	position: fixed;
 	left: 5px;

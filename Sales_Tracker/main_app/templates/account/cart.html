@@ -5,6 +5,7 @@
 {% endblock%}
 
 {% block content %}
+	<body class="cart">
 	<h2 class="text-center">Your Cart (<span id="cart-num-items">{{ num_items_in_cart }}</span>)</h2>
 	
 	<form id="checkout-form" class="inline" method="post" onsubmit="return checkout(this)">
@@ -54,4 +55,5 @@
 		</div>
 	{% endfor %}
 	<hr>
+	</body>
 {% endblock %}

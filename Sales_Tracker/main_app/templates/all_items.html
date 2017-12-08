@@ -5,10 +5,12 @@
 {% endblock%}
 
 {% block content %}
+	<body class="allitems">
 	<br>
 	<input type="search" placeholder="Search Items..." oninput="searchItems(this.value)" autofocus>
 	
 	<br><hr><br>
 
 	{% include 'sub_templates/all_items.html' %}
+	</body>
 {% endblock %}
