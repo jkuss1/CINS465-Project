@@ -25,7 +25,7 @@ SECRET_KEY = 'agk+^q_@w8f$9-q3xg%hx5x3ipfp*j23i4#p@1f15=@yyk^3qn'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['35.197.2.0', 'localhost']
 
 
 # Application definition
@@ -77,12 +77,8 @@ WSGI_APPLICATION = 'Sales_Tracker.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'djangosalestracker',
-        'USER': 'django',
-        'PASSWORD': 'I42MtJl8edAGgorw',
-        'HOST': '104.199.122.178',
-        'PORT': '5432',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
 
