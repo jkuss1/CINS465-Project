@@ -12,9 +12,9 @@ import sys
 
 from django.core.wsgi import get_wsgi_application
 
-path = '/home/path/to/Sales_Tracker'
-if path not in sys.path:
-    sys.path.append(path)
+import sys
+
+sys.path.append("/home/erikingvoldsen/CINS465-Project/Sales_Tracker_Google")
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "Sales_Tracker.settings")
 
