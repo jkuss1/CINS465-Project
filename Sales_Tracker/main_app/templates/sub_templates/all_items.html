@@ -40,11 +40,15 @@
 					<input id="add-to-cart-form-{{ item.id }}-btn" type="submit" class="button" value="Add to Cart">
 				</form>
 				
-				{% if seller_online %}
-					<button class="button bg-green" onclick="startChat('{{ item.user.username }}')">Chat with User</button>
-				{% else %}
-					<button class="button bg-green">Email Seller</button>
-				{% endif %}
+				{% for seller_online in sellers_online %}
+					{% if item.user.username != username and seller_online.0 == item.user.username %}
+						{% if seller_online.1 %}
+							<button class="button bg-green" onclick="startChat('{{ item.user.username }}')">Chat with User</button>
+						{% else %}
+							<a href="{% url 'send_email' item.id %}" class="button bg-green">Email Seller</a>
+						{% endif %}
+					{% endif %}
+				{% endfor %}
 			{% endif %}
 		</div>
 		<hr>

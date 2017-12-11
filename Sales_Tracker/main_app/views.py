@@ -75,22 +75,31 @@ def GET_ITEMS(start=0, end=25):
 
 # VIEWS #
 def index(request):
-	user_items, num_user_items = GET_USER_ITEMS(request.user)
+	items = GET_ITEMS(0, 5)
+	sellers_online = []
+
+	for item in items:
+		sellers_online.append((item.user.username, item.user.online.online))
 	
 	context = {
 		'username': request.user.username,
-		'items': GET_ITEMS(0, 5),
-		'user_items': user_items,
-		'num_user_items': num_user_items
+		'items': items,
+		'sellers_online': sellers_online
 	}
 	
 	return render(request, 'index.html', context)
 
 def all_items(request):
+	items = GET_ITEMS()
+	sellers_online = []
+
+	for item in items:
+		sellers_online.append((item.user.username, item.user.online.online))
+	
 	context = {
 		'username': request.user.username,
-		'items': GET_ITEMS(),
-		'seller_online': True
+		'items': items,
+		'sellers_online': sellers_online
 	}
 	
 	return render(request, 'all_items.html', context)
@@ -339,29 +348,6 @@ def cart(request):
 	return render(request, 'account/cart.html', context)
 
 @login_required
-def checkout(request):
-	if request.method == 'POST':
-		cart = request.user.cart
-		item_ids = cart.item_ids.split(",")
-		items = []
-
-		for cart_item_id in item_ids:
-			if cart_item_id:
-				items.append(Item.objects.get(id=cart_item_id))
-		
-		cart.item_ids = ""
-		cart.save()
-		
-		context = {
-			'username': request.user.username,
-			'items': items
-		}
-		
-		return render(request, 'account/checkout.html', context)
-	else:
-		return HttpResponse(status=405)
-
-@login_required
 def add_to_cart(request, itemID):
 	if request.method == 'POST':
 		cart = request.user.cart
@@ -406,15 +392,97 @@ def delete_from_cart(request, item_id):
 		return HttpResponse(status=405)
 
 @login_required
-def contact_us(request):
+def checkout(request, username):
 	if request.method == 'POST':
-		contact_form = ContactForm(request.POST)
+		if request.user.username == username:
+			cart = request.user.cart
+			item_ids = cart.item_ids.split(",")
+			
+			for cart_item_id in item_ids:
+				if cart_item_id:
+					item = Item.objects.get(id=cart_item_id)
+					item.units_sold = item.units_sold + 1
+					item.save()
+			
+			return HttpResponseRedirect('/account/receipt/' + username)
+		else:
+			return HttpResponseRedirect('/')
+	else:
+		return HttpResponseRedirect('/')
 
-		if contact_form.is_valid():
+@login_required
+def receipt(request, username):
+	if request.user.username == username:
+		cart = request.user.cart
+		item_ids = cart.item_ids.split(",")
+		items = []
+
+		for cart_item_id in item_ids:
+			if cart_item_id:
+				items.append(Item.objects.get(id=cart_item_id))
+		
+		cart.item_ids = ""
+		cart.save()
+		
+		context = {
+			'username': request.user.username,
+			'items': items
+		}
+
+		return render(request, 'account/receipt.html', context)
+	else:
+		return HttpResponseRedirect('/')
+
+@login_required
+def send_email(request, item_id):
+	item = Item.objects.get(id=item_id)
+	
+	if request.method == 'POST':
+		email_form = EmailForm(request.POST)
+
+		if email_form.is_valid():
 			try:
 				send_mail(
-					contact_form.cleaned_data.get('subject'),
-					contact_form.cleaned_data.get('text'),
+					email_form.cleaned_data.get('subject'),
+					email_form.cleaned_data.get('text'),
+					request.user.email,
+					[item.user.email]
+				)
+
+				success = 1
+			except:
+				success = 0
+			
+			if success == 1:
+				return HttpResponseRedirect('/all_items/')
+			else:
+				context = {
+					'item': item,
+					'form': EmailForm(),
+					'success': success
+				}
+
+				return render(request, 'email_seller.html', context)
+	else:
+		email_form = EmailForm()
+	
+	context = {
+		'form': email_form,
+		'item': item
+	}
+	
+	return render(request, 'email_seller.html', context)
+
+@login_required
+def contact_us(request):
+	if request.method == 'POST':
+		email_form = EmailForm(request.POST)
+
+		if email_form.is_valid():
+			try:
+				send_mail(
+					email_form.cleaned_data.get('subject'),
+					email_form.cleaned_data.get('text'),
 					request.user.email,
 					[User.objects.get(username='admin').email]
 				)
@@ -425,19 +493,19 @@ def contact_us(request):
 
 			context = {
 				'username': request.user.username,
-				'form': ContactForm(),
+				'form': EmailForm(),
 				'success': success
 			}
 			
-			return render(request, 'account/contact_us.html', context)
+			return render(request, 'contact_us.html', context)
 	else:
-		contact_form = ContactForm()
+		email_form = EmailForm()
 	
 	context = {
-		'form': contact_form
+		'form': email_form
 	}
 
-	return render(request, 'account/contact_us.html', context)
+	return render(request, 'contact_us.html', context)
 
 def register(request):
 	if request.method == 'POST':
@@ -448,6 +516,11 @@ def register(request):
 			
 			Cart.objects.create(
 				user = user
+			)
+
+			UserOnline.objects.create(
+				user = user,
+				online = True
 			)
 			
 			user = authenticate(

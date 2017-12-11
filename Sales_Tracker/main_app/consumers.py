@@ -15,6 +15,9 @@ class Consumer(JsonWebsocketConsumer):
 		if message.user.username:
 			message.reply_channel.send({'accept': True})
 			Group('ALL').add(message.reply_channel)
+			
+			message.user.online.online = True
+			message.user.online.save()
 
 			consumers[message.user.username] = message.reply_channel
 			
@@ -29,6 +32,9 @@ class Consumer(JsonWebsocketConsumer):
 		if message.user.username:
 			message.reply_channel.send({'close': True})
 			Group('ALL').discard(message.reply_channel)
+
+			message.user.online.online = False
+			message.user.online.save()
 	
 	def receive(self, content, **kwargs):
 		if self.message.user.username:

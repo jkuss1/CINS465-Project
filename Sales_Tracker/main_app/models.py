@@ -109,3 +109,15 @@ class Cart(models.Model):
 
 	def __str__(self):
 		return self.user.username
+
+class UserOnline(models.Model):
+	user = models.OneToOneField(
+		User,
+		related_name = 'online',
+		on_delete = models.CASCADE
+	)
+
+	online = models.BooleanField()
+
+	def __str__(self):
+		return self.user.username

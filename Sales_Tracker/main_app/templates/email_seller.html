@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Send Email
+{% endblock %}
+
+{% block content %}
+	<body class="contact">
+        <h1 class="text-center">Email Seller</h1>
+        <h2 class="text-center">{{ item.name }}</h2>
+        
+        {% if success == 1 %}
+            <h3 class="text-green text-center">Message Sent</h3>
+        {% elif success == 0 %}
+            <h3 class="text-red text-center">Message Failed to Send. Please Try Again.</h3>
+        {% endif %}
+
+        <form method="post" action="{% url 'send_email' item.id %}">
+            {% csrf_token %}
+
+            {{ form }}
+            <input type="submit" value="Submit" class="button expanded"/>
+        </form>
+    </body>
+{% endblock %}

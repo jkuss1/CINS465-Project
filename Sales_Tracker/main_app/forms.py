@@ -122,7 +122,7 @@ class NewImageForm(forms.ModelForm):
 		model = ItemImage
 		exclude = ["item"]
 
-class ContactForm(forms.Form):
+class EmailForm(forms.Form):
 	subject = forms.CharField()
 
 	text = forms.CharField(

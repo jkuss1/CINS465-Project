@@ -18,7 +18,7 @@
         {% if success == 1 %}
             <h3 class="text-green text-center">Message Sent</h3>
         {% elif success == 0 %}
-            <h3 class="text-red text-center">Message Failed to Send</h3>
+            <h3 class="text-red text-center">Message Failed to Send. Please Try Again.</h3>
         {% endif %}
 
         <form method="post" action="{% url 'contact_us' %}">

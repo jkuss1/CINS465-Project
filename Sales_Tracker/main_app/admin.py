@@ -11,3 +11,5 @@ admin.site.register(
 )
 
 admin.site.register(Cart)
+
+admin.site.register(UserOnline)
