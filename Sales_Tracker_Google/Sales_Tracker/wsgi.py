@@ -14,7 +14,7 @@ from django.core.wsgi import get_wsgi_application
 
 import sys
 
-sys.path.append("/home/erikingvoldsen/CINS465-Project/Sales_Tracker_Google")
+sys.path.append("/home/user/CINS465-Project/Sales_Tracker_Google")
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "Sales_Tracker.settings")
 
