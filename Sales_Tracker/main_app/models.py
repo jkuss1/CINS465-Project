@@ -98,26 +98,21 @@ class ItemImage(models.Model):
 	def __str__(self):
 		return self.alt
 
-class Cart(models.Model):
+class AccountSettings(models.Model):
 	user = models.OneToOneField(
 		User,
-		related_name = 'cart',
+		related_name = "settings",
 		on_delete = models.CASCADE
 	)
-
-	item_ids = models.TextField()
-
-	def __str__(self):
-		return self.user.username
-
-class UserOnline(models.Model):
-	user = models.OneToOneField(
-		User,
-		related_name = 'online',
-		on_delete = models.CASCADE
+	
+	deny_chat = models.BooleanField()
+	
+	cart = models.TextField(
+		null = True,
+		blank = True
 	)
-
+	
 	online = models.BooleanField()
-
+	
 	def __str__(self):
 		return self.user.username

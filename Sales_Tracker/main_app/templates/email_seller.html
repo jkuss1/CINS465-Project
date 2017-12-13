@@ -6,7 +6,7 @@
 
 {% block content %}
 	<body class="contact">
-        <h1 class="text-center">Email Seller</h1>
+        <h1 class="text-center">Email {{ item.user.username }}</h1>
         <h2 class="text-center">{{ item.name }}</h2>
         
         {% if success == 1 %}

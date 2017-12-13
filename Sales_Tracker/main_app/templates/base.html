@@ -29,7 +29,7 @@
 						<li><a href="{% url 'cart' %}">Cart</a></li>
 						<ul class="dropdown menu" data-dropdown-menu>
 							<li>
-								<a>Account</a>
+								<a href="{% url 'account' %}">Account</a>
 								<ul class="menu">
 									<li><a href="{% url 'add_item' %}">Add New Item</a></li>
 									<li><a href="{% url 'user_items' %}">Your Items</a></li>
@@ -53,7 +53,7 @@
 		
 		<div id="calc">
 			<div id="calc-header">Calculator</div>
-			<span id="calc-close">X</span>
+			<span class="close-btn" onclick="toggleCalculator()">X</span>
 			<input id="calc-input" type="text"/>
 			<button class="calc-btn">7</button>
 			<button class="calc-btn">8</button>
@@ -80,7 +80,10 @@
 
 		<!-- Chat -->
 		<div id="chat-cont">
+			<span class="close-btn" onclick="closeChat()">X</span>
 			<div id="chat-header"></div>
+			<div id="chat-body"></div>
+			<input type="text" id="chat-msg-input" placeholder="Type Message Here..." onkeypress="if (event.keyCode == 13) {sendMsg()}"></input>
 		</div>
 		<!-- [END] Chat -->
 		
@@ -95,6 +98,7 @@
 		<script src="{% static 'js/websocket.js' %}"></script>
 		<script>
 			var curUsername = "{{ username }}";
+			var denyChat = {{ deny_chat }};
 		</script>
 		{% block scripts %}{% endblock %}
 	</body>

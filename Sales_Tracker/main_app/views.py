@@ -73,33 +73,31 @@ def GET_ITEMS(start=0, end=25):
 	
 	return items
 
-# VIEWS #
-def index(request):
-	items = GET_ITEMS(0, 5)
+def GET_ONLINE_USERS(items):
 	sellers_online = []
 
 	for item in items:
-		sellers_online.append((item.user.username, item.user.online.online))
+		sellers_online.append((item.id, item.user.settings.online, item.user.settings.deny_chat))
+	
+	return sellers_online
+
+# VIEWS #
+def index(request):
+	items = GET_ITEMS(0, 5)
 	
 	context = {
-		'username': request.user.username,
 		'items': items,
-		'sellers_online': sellers_online
+		'sellers_online': GET_ONLINE_USERS(items)
 	}
 	
 	return render(request, 'index.html', context)
 
 def all_items(request):
 	items = GET_ITEMS()
-	sellers_online = []
-
-	for item in items:
-		sellers_online.append((item.user.username, item.user.online.online))
 	
 	context = {
-		'username': request.user.username,
 		'items': items,
-		'sellers_online': sellers_online
+		'sellers_online': GET_ONLINE_USERS(items)
 	}
 	
 	return render(request, 'all_items.html', context)
@@ -181,14 +179,21 @@ def search_items(request, keyword):
 
 @login_required
 def account(request):
-	user_items, num_user_items = GET_USER_ITEMS(request.user)
-
+	if request.method == 'POST':
+		account_settings_form = AccountSettingsForm(request.POST)
+		
+		if account_settings_form.is_valid():
+			request.user.settings.deny_chat = account_settings_form.cleaned_data['deny_chat']
+			request.user.settings.save()
+			
+			return HttpResponseRedirect('/account/')
+	else:
+		account_settings_form = AccountSettingsForm()
+	
 	context = {
-		'username': request.user.username,
-		'user_items': user_items,
-		'num_user_items': num_user_items
+		'form': account_settings_form
 	}
-
+	
 	return render(request, 'account/account.html', context)
 
 @login_required
@@ -196,7 +201,6 @@ def user_items(request):
 	user_items, num_user_items = GET_USER_ITEMS(request.user)
 
 	context = {
-		'username': request.user.username,
 		'user_items': user_items,
 		'num_user_items': num_user_items
 	}
@@ -225,7 +229,6 @@ def sales_data(request):
 		})
 	
 	context = {
-		'username': request.user.username,
 		'user_items': user_items,
 		'num_user_items': num_user_items
 	}
@@ -279,7 +282,6 @@ def add_item(request):
 		new_item_form = NewItemForm()
 	
 	context = {
-		'username': request.user.username,
 		'form': new_item_form
 	}
 
@@ -307,7 +309,6 @@ def add_item_images(request, itemID):
 		return HttpResponseRedirect('/account/')
 	
 	context = {
-		'username': request.user.username,
 		'form': new_image_form,
 		'item': item,
 		'item_images': ItemImage.objects.filter(item=item)
@@ -330,17 +331,22 @@ def delete_item(request, itemID):
 
 @login_required
 def cart(request):
-	cart_item_ids = request.user.cart.item_ids.split(',')
+	user_settings = request.user.settings
 	items = []
 	num_items_in_cart = 0
-
-	for cart_item_id in cart_item_ids:
-		if cart_item_id:
-			num_items_in_cart = num_items_in_cart + 1
-			items.append(Item.objects.get(id=cart_item_id))
+	
+	if user_settings.cart:
+		cart_item_ids = user_settings.cart.split(',')
+		
+		for cart_item_id in cart_item_ids:
+			if cart_item_id:
+				item = Item.objects.filter(id=cart_item_id)
+				
+				if item:
+					num_items_in_cart = num_items_in_cart + 1
+					items.append(item[0])
 	
 	context = {
-		'username': request.user.username,
 		'items': items,
 		'num_items_in_cart': num_items_in_cart
 	}
@@ -350,19 +356,21 @@ def cart(request):
 @login_required
 def add_to_cart(request, itemID):
 	if request.method == 'POST':
-		cart = request.user.cart
-		item_ids = cart.item_ids.split(',')
+		user_settings = request.user.settings
 		
-		for cart_item_id in item_ids:
-			if itemID == cart_item_id:
-				return HttpResponse(status=200)
+		if user_settings.cart:
+			item_ids = user_settings.cart.split(',')
+			
+			for cart_item_id in item_ids:
+				if itemID == cart_item_id:
+					return HttpResponse(status=200)
 		
-		if cart.item_ids == "":
-			cart.item_ids = cart.item_ids + itemID
+		if not user_settings.cart or user_settings.cart == "":
+			user_settings.cart = itemID
 		else:
-			cart.item_ids = cart.item_ids + "," + itemID
+			user_settings.cart = user_settings.cart + "," + itemID
 		
-		cart.save()
+		user_settings.save()
 		
 		return HttpResponse(status=200)
 	else:
@@ -371,19 +379,19 @@ def add_to_cart(request, itemID):
 @login_required
 def delete_from_cart(request, item_id):
 	if request.method == 'POST':
-		cart = request.user.cart
+		user_settings = request.user.settings
 
-		if cart.user == request.user:
-			if cart.item_ids.find("," + item_id + ",") != -1:
-				cart.item_ids = cart.item_ids.replace("," + item_id, "")
-			elif cart.item_ids.find(item_id + ",") != -1:
-				cart.item_ids = cart.item_ids.replace(item_id + ",", "")
-			elif cart.item_ids.find("," + item_id) != -1:
-				cart.item_ids = cart.item_ids.replace("," + item_id, "")
+		if user_settings.user == request.user:
+			if user_settings.cart.find("," + item_id + ",") != -1:
+				user_settings.cart = user_settings.cart.replace("," + item_id, "")
+			elif user_settings.cart.find(item_id + ",") != -1:
+				user_settings.cart = user_settings.cart.replace(item_id + ",", "")
+			elif user_settings.cart.find("," + item_id) != -1:
+				user_settings.cart = user_settings.cart.replace("," + item_id, "")
 			else:
-				cart.item_ids = cart.item_ids.replace(item_id, "")
+				user_settings.cart = user_settings.cart.replace(item_id, "")
 			
-			cart.save()
+			user_settings.save()
 			
 			return HttpResponse(status=200)
 		else:
@@ -395,8 +403,8 @@ def delete_from_cart(request, item_id):
 def checkout(request, username):
 	if request.method == 'POST':
 		if request.user.username == username:
-			cart = request.user.cart
-			item_ids = cart.item_ids.split(",")
+			user_settings = request.user.settings
+			item_ids = user_settings.cart.split(",")
 			
 			for cart_item_id in item_ids:
 				if cart_item_id:
@@ -413,19 +421,18 @@ def checkout(request, username):
 @login_required
 def receipt(request, username):
 	if request.user.username == username:
-		cart = request.user.cart
-		item_ids = cart.item_ids.split(",")
+		user_settings = request.user.settings
+		item_ids = user_settings.cart.split(",")
 		items = []
 
 		for cart_item_id in item_ids:
 			if cart_item_id:
 				items.append(Item.objects.get(id=cart_item_id))
 		
-		cart.item_ids = ""
-		cart.save()
+		user_settings.cart = ""
+		user_settings.save()
 		
 		context = {
-			'username': request.user.username,
 			'items': items
 		}
 
@@ -492,7 +499,6 @@ def contact_us(request):
 				success = 0
 
 			context = {
-				'username': request.user.username,
 				'form': EmailForm(),
 				'success': success
 			}
@@ -514,12 +520,9 @@ def register(request):
 		if reg_form.is_valid():
 			user = reg_form.save()
 			
-			Cart.objects.create(
-				user = user
-			)
-
-			UserOnline.objects.create(
+			AccountSettings.objects.create(
 				user = user,
+				deny_chat = False,
 				online = True
 			)
 			
@@ -529,7 +532,7 @@ def register(request):
 			)
 
 			login(request, user)
-			return HttpResponseRedirect('/account/')
+			return HttpResponseRedirect('/')
 	else:
 		reg_form = RegistrationForm()
 	

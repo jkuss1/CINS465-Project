@@ -4,9 +4,9 @@ from django.contrib.auth.models import User
 
 from .models import *
 
-MONEY_PLACEHOLDER = "12.34"
-DATETIME_FORMATS = ["%Y-%m-%d %H:%M"]
-DATETIME_PLACEHOLDER = "YYYY-mm-dd HH:MM (24-Hour Time Format)"
+MONEY_PLACEHOLDER = '12.34'
+DATETIME_FORMATS = ['%Y-%m-%d %H:%M']
+DATETIME_PLACEHOLDER = 'YYYY-mm-dd HH:MM (24-Hour Time Format)'
 
 class NewItemForm(forms.ModelForm):
 	name = forms.CharField(
@@ -120,10 +120,16 @@ class NewImageForm(forms.ModelForm):
 
 	class Meta:
 		model = ItemImage
-		exclude = ["item"]
+		exclude = ['item']
 
 class EmailForm(forms.Form):
-	subject = forms.CharField()
+	subject = forms.CharField(
+		widget = forms.TextInput(
+			attrs = {
+				'placeholder': "Subject"
+			}
+		)
+	)
 
 	text = forms.CharField(
 		widget = forms.Textarea(
@@ -140,13 +146,23 @@ class RegistrationForm(UserCreationForm):
 
 	class Meta:
 		model = User
-		fields = ("username", "email", "password1", "password2")
+		fields = ('username', 'email', 'password1', 'password2')
 	
 	def save(self, commit=True):
 		user = super(RegistrationForm, self).save(commit=False)
-		user.email = self.cleaned_data["email"]
+		user.email = self.cleaned_data['email']
 		
 		if commit:
 			user.save()
 		
 		return user
+
+class AccountSettingsForm(forms.ModelForm):
+	deny_chat = forms.BooleanField(
+		required = False,
+		label = "Deny All Chat Requests"
+	)
+
+	class Meta:
+		model = AccountSettings
+		fields = ('deny_chat',)

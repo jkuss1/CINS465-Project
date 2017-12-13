@@ -41,9 +41,9 @@
 				</form>
 				
 				{% for seller_online in sellers_online %}
-					{% if item.user.username != username and seller_online.0 == item.user.username %}
-						{% if seller_online.1 %}
-							<button class="button bg-green" onclick="startChat('{{ item.user.username }}')">Chat with User</button>
+					{% if item.user.username != username and seller_online.0 == item.id %}
+						{% if seller_online.1 and not seller_online.2 %}
+							<button class="button bg-green" onclick="startChat('{{ item.user.username }}')">Chat with Seller</button>
 						{% else %}
 							<a href="{% url 'send_email' item.id %}" class="button bg-green">Email Seller</a>
 						{% endif %}

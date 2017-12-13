@@ -5,5 +5,22 @@
 {% endblock%}
 
 {% block content %}
-	<h1 class="text-center">Welcome, {{ username }}</h1>
+	<h1 class="text-center">Your Account Settings</h1>
+
+	<hr>
+	
+	<form method="post" action="{% url 'account' %}">
+		{% csrf_token %}
+
+		{{ form }}
+		<input type="submit" class="button expanded" value="Save">
+	</form>
+{% endblock %}
+
+{% block scripts %}
+	<script>
+		if (denyChat) {
+			document.getElementById("id_deny_chat").checked = true;
+		}
+	</script>
 {% endblock %}

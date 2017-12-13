@@ -10,6 +10,4 @@ admin.site.register(
 	list_display = ['alt', 'item']
 )
 
-admin.site.register(Cart)
-
-admin.site.register(UserOnline)
+admin.site.register(AccountSettings)

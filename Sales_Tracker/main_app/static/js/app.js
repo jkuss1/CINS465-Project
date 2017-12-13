@@ -113,6 +113,7 @@ function deleteItem(form)
 			'data': $("#" + form.id).serialize(),
 			'success': function() {
 				$("#" + form.id).parent().remove();
+				$("#num-user-items").html($("#num-user-items").html() - 1);
 			},
 			'error': function() {
 				alert("Unable to delete \"" + name + "\".\nPlease try again.");

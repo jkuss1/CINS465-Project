@@ -76,10 +76,19 @@ body.allitems {
 	background: linear-gradient( rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4) ), url("https://i.imgur.com/5dXWOCL.jpg");
 }
 
+.close-btn {
+	position: absolute;
+	top: 0px;
+	right: 3px;
+	cursor: pointer;
+	font-size: 0.8em;
+}
+
 #calc-btn {
 	position: fixed;
 	left: 5px;
 	bottom: 5px;
+	cursor: pointer;
 }
 
 #calc {
@@ -100,14 +109,6 @@ body.allitems {
 	text-align: center;
 	font-size: 1.5em;
 	border-radius: 3px;
-}
-
-#calc-close {
-	position: absolute;
-	top: 0px;
-	right: 3px;
-	cursor: pointer;
-	font-size: 0.8em;
 }
 
 .calc-btn {
@@ -146,4 +147,37 @@ body.allitems {
 	background-color: darkgray;
 	font-size: 1.3em;
 	line-height: 40px;
+}
+
+#chat-body {
+	height: 216px;
+	overflow: auto;
+	margin-bottom: 5px;
+}
+
+#chat-msg-input {}
+
+.chat-msg {
+	position: relative;
+	width: 75%;
+	margin-top: 5px;
+	margin-left: 1%;
+	background-color: lightblue;
+}
+
+.chat-msg-user {
+	margin-left: 24%;
+	background-color: darkgray;
+}
+
+.chat-msg-text {
+	padding-left: 1%;
+	padding-bottom: 1em;
+}
+
+.chat-msg-name {
+	position: absolute;
+	right: 1%;
+	bottom: 0;
+	font-size: 0.7em;
 }
