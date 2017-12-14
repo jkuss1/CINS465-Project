@@ -15,9 +15,11 @@
 				&emsp;&emsp;&emsp;
 				<strong>Price Per Item:</strong> ${{ user_item.price }}
 				<br>
-				<strong>Total Items Sold:</strong> {{ user_item.units_sold }}
+				<strong>Total Units Sold:</strong> {{ user_item.units_sold }}
 				&emsp;&emsp;&emsp;
-				<strong>Total Items Available:</strong> {{ user_item.units_available }}
+				<strong>Total Units Available:</strong> {{ user_item.units_available }}
+				&emsp;&emsp;&emsp;
+				<strong>Total Units Purchased:</strong> {{ user_item.units_purchased }}
 			</p>
 			
 			{% if user_item.sale_start and user_item.sale_end %}

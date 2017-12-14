@@ -88,25 +88,29 @@
             </p>
             
             <p>
-                Most Profitable Month (average):
-                {% for month in most_profitable_months %}
-                    {% if forloop.counter > 1 %}
-                        , {{ month }}
-                    {% else %}
-                        {{ month }}
-                    {% endif %}
-                {% endfor %}
+                {% if most_profitable_months %}
+                    Most Profitable Month (average):
+                    {% for month in most_profitable_months %}
+                        {% if forloop.counter > 1 %}
+                            , {{ month }}
+                        {% else %}
+                            {{ month }}
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
             </p>
             
             <p>
-                Least Profitable Month (average):
-                {% for month in least_profitable_months %}
-                    {% if forloop.counter > 1 %}
-                        , {{ month }}
-                    {% else %}
-                        {{ month }}
-                    {% endif %}
-                {% endfor %}
+                {% if least_profitable_months %}
+                    Least Profitable Month (average):
+                    {% for month in least_profitable_months %}
+                        {% if forloop.counter > 1 %}
+                            , {{ month }}
+                        {% else %}
+                            {{ month }}
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
             </p>
         {% else %}
             <p>Please log in to view your Sales Information.</p>
