@@ -268,22 +268,119 @@ def sales_data(request):
 @login_required
 def sales_info(request):
 	items = Item.objects.filter(user=request.user)
+
+	total_units_sold = 0
+	total_cost = 0
+	total_revenue = 0
+	months = {}
 	
-	items_sold = items.order_by('-units_sold')
-	highest_selling_items = []
+	for item in items:
+		total_units_sold = total_units_sold + item.units_sold
+		total_cost = total_cost + (item.cost * item.units_purchased)
+		total_revenue = total_revenue + (item.price * item.units_sold)
+
+		dates_sold = ItemUnitSoldDate.objects.filter(item=item)
+		for date_sold in dates_sold:
+			month = str(date_sold.date).split('-')[1]
+			if not months.get(month):
+				months[month] = (item.price - item.cost) * date_sold.amount
+			else:
+				months[month] = months[month] + ((item.price - item.cost) * date_sold.amount)
 	
-	if len(items_sold) > 1:
-		for i in range(0, len(items_sold)):
-			if i + 1 < len(items_sold):
-				if items_sold[i].units_sold > items_sold[i + 1].units_sold:
-					highest_selling_items.append(items_sold[i])
-				else:
-					highest_selling_items.append(items_sold[i + 1])
-	elif len(items_sold) == 1:
-		highest_selling_items.append(items_sold[0])
+	most_profitable_months = []
+	most_profitable_month_amount = -1
+	least_profitable_months = []
+	least_profitable_month_amount = float('inf')
+	for month, profit in months.items():
+		if profit > most_profitable_month_amount:
+			most_profitable_months = []
+			most_profitable_months.append(MONTH_NUM_TO_NAME[int(month)] + ".")
+			most_profitable_month_amount = profit
+		elif profit == most_profitable_month_amount:
+			most_profitable_months.append(MONTH_NUM_TO_NAME[int(month)] + ".")
+		if profit < least_profitable_month_amount:
+			least_profitable_months = []
+			least_profitable_months.append(MONTH_NUM_TO_NAME[int(month)] + ".")
+			least_profitable_month_amount = profit
+		elif profit == least_profitable_month_amount:
+			least_profitable_months.append(MONTH_NUM_TO_NAME[int(month)] + ".")
+	
+	highest_selling_items = items.order_by('-units_sold')
+	highest_selling_items_range = 1
+	for i in range(0, len(highest_selling_items)):
+		if i + 1 < len(highest_selling_items):
+			if highest_selling_items[i + 1].units_sold == highest_selling_items[i].units_sold:
+				highest_selling_items_range = highest_selling_items_range + 1
+			else:
+				break
+		else:
+			break
+	
+	lowest_selling_items = items.order_by('units_sold')
+	lowest_selling_items_range = 1
+	for i in range(0, len(lowest_selling_items)):
+		if i + 1 < len(lowest_selling_items):
+			if lowest_selling_items[i + 1].units_sold == lowest_selling_items[i].units_sold:
+				lowest_selling_items_range = lowest_selling_items_range + 1
+			else:
+				break
+		else:
+			break
+	
+	most_expensive_items = items.order_by('-price')
+	most_expensive_items_range = 1
+	for i in range(0, len(most_expensive_items)):
+		if i + 1 < len(most_expensive_items):
+			if most_expensive_items[i + 1].price == most_expensive_items[i].price:
+				most_expensive_items_range = most_expensive_items_range + 1
+			else:
+				break
+		else:
+			break
+	
+	cheapest_items = items.order_by('price')
+	cheapest_items_range = 1
+	for i in range(0, len(cheapest_items)):
+		if i + 1 < len(cheapest_items):
+			if cheapest_items[i + 1].price == cheapest_items[i].price:
+				cheapest_items_range = cheapest_items_range + 1
+			else:
+				break
+		else:
+			break
+	
+	most_profitable_items = []
+	most_profitable_items_amount = -1
+	least_profitable_items = []
+	least_profitable_items_amount = float('inf')
+	for item in items:
+		profit = item.price - item.cost
+		if profit > most_profitable_items_amount:
+			most_profitable_items = []
+			most_profitable_items.append(item)
+			most_profitable_items_amount = profit
+		elif profit == most_profitable_items_amount:
+			most_profitable_items.append(item)
+		if profit < least_profitable_items_amount:
+			least_profitable_items = []
+			least_profitable_items.append(item)
+			least_profitable_items_amount = profit
+		elif profit == least_profitable_items_amount:
+			least_profitable_items.append(item)
 	
 	context = {
-		'highest_selling_items': highest_selling_items
+		'total_units_sold': total_units_sold,
+		'total_cost': total_cost,
+		'total_revenue': total_revenue,
+		'total_profit': total_revenue - total_cost,
+		'highest_selling_items': highest_selling_items[:highest_selling_items_range],
+		'lowest_selling_items': lowest_selling_items[:lowest_selling_items_range],
+		'most_expensive_items': most_expensive_items[:most_expensive_items_range],
+		'cheapest_items': cheapest_items[:cheapest_items_range],
+		'most_profitable_items': most_profitable_items,
+		'least_profitable_items': least_profitable_items,
+		'most_profitable_months': most_profitable_months,
+		'least_profitable_months': least_profitable_months
 	}
 
 	return render(request, 'account/sales_info.html', context)

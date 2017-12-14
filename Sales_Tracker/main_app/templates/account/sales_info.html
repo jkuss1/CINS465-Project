@@ -16,6 +16,11 @@
         <br><hr><br>
 
         {% if user.is_authenticated %}
+            <p>Total Items Sold: {{ total_units_sold }}</p>
+            <p>Total Revenue For All Items: ${{ total_revenue }}</p>
+            <p>Total Cost For All Items: ${{ total_cost }}</p>
+            <p>Total Profit For All Items: ${{ total_profit }}</p>
+            
             <p>
                 Highest Selling Item(s): 
                 {% for item in highest_selling_items %}
@@ -27,18 +32,82 @@
                 {% endfor %}
             </p>
 
-            <p>Lowest Selling Item(s):</p>
-            <p>Total Items Sold:</p>
-            <p>Most Discounted Item(s):</p>
-            <p>Most Expensive Item(s):</p>
-            <p>Cheapest Item(s):</p>
-            <p>Most Profitable Item(s):</p>
-            <p>Least Profitable Item(s):</p>
-            <p>Total Revenue For All Items:</p>
-            <p>Most Profitable Month (average):</p>
-            <p>Least Profitable Month (average):</p>
-            <p>Total Cost For All Items:</p>
-            <p>Total Profit For All Items:</p>
+            <p>
+                Lowest Selling Item(s):
+                {% for item in lowest_selling_items %}
+                    {% if forloop.counter > 1 %}
+                        , {{ item.name }}
+                    {% else %}
+                        {{ item.name }}
+                    {% endif %}
+                {% endfor %}
+            </p>
+            
+            <p>
+                Most Expensive Priced Item(s):
+                {% for item in most_expensive_items %}
+                    {% if forloop.counter > 1 %}
+                        , {{ item.name }}
+                    {% else %}
+                        {{ item.name }}
+                    {% endif %}
+                {% endfor %}
+            </p>
+            
+            <p>
+                Cheapest Priced Item(s):
+                {% for item in cheapest_items %}
+                    {% if forloop.counter > 1 %}
+                        , {{ item.name }}
+                    {% else %}
+                        {{ item.name }}
+                    {% endif %}
+                {% endfor %}
+            </p>
+            
+            <p>
+                Most Profitable Item(s):
+                {% for item in most_profitable_items %}
+                    {% if forloop.counter > 1 %}
+                        , {{ item.name }}
+                    {% else %}
+                        {{ item.name }}
+                    {% endif %}
+                {% endfor %}
+            </p>
+            
+            <p>
+                Least Profitable Item(s):
+                {% for item in least_profitable_items %}
+                    {% if forloop.counter > 1 %}
+                        , {{ item.name }}
+                    {% else %}
+                        {{ item.name }}
+                    {% endif %}
+                {% endfor %}
+            </p>
+            
+            <p>
+                Most Profitable Month (average):
+                {% for month in most_profitable_months %}
+                    {% if forloop.counter > 1 %}
+                        , {{ month }}
+                    {% else %}
+                        {{ month }}
+                    {% endif %}
+                {% endfor %}
+            </p>
+            
+            <p>
+                Least Profitable Month (average):
+                {% for month in least_profitable_months %}
+                    {% if forloop.counter > 1 %}
+                        , {{ month }}
+                    {% else %}
+                        {{ month }}
+                    {% endif %}
+                {% endfor %}
+            </p>
         {% else %}
             <p>Please log in to view your Sales Information.</p>
         {% endif %}
