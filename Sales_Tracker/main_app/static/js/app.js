@@ -230,6 +230,15 @@ function searchItems(keyword)
 					var name = document.createElement("h3");
 					name.innerHTML = item.name;
 					itemCont.appendChild(name);
+
+					var seller = document.createElement("p");
+					itemCont.appendChild(seller);
+
+					var strong = document.createElement("strong");
+					strong.innerHTML = "Seller: ";
+					seller.appendChild(strong);
+
+					seller.innerHTML += item.seller;
 					
 					for (var j = 0; j < item.images.length; j++) {
 						var image = item.images[j];
@@ -241,20 +250,24 @@ function searchItems(keyword)
 						itemCont.appendChild(img);
 					}
 
+					var br = document.createElement("br");
+					itemCont.appendChild(br);
+					
+					br = document.createElement("br");
+					itemCont.appendChild(br);
+
 					var p = document.createElement("p");
 					itemCont.appendChild(p);
-
-					var strong = document.createElement("strong");
-					strong.innerHTML = "Item Details: "
+					
+					strong = document.createElement("strong");
+					strong.innerHTML = "Price Per Item: "
 					p.appendChild(strong);
 					
-					p.innerHTML += item.details + "&emsp;&emsp;&emsp;";
-
-					strong = document.createElement("strong");
-					strong.innerHTML = "Cost Per Item: "
-					p.appendChild(strong);
-
-					p.innerHTML += item.cost + "&emsp;&emsp;&emsp;";
+					if (item.price.split(".")[1].length == 1) {
+						item.price += "0";
+					}
+					
+					p.innerHTML += "$" + item.price + "&emsp;&emsp;&emsp;";
 					
 					strong = document.createElement("strong");
 					strong.innerHTML = "Total Available: "
@@ -295,6 +308,15 @@ function searchItems(keyword)
 						
 						p.innerHTML += item.discountEnd;
 					}
+
+					p = document.createElement("p");
+					itemCont.appendChild(p);
+
+					strong = document.createElement("strong");
+					strong.innerHTML = "Item Details: ";
+					p.appendChild(strong);
+
+					p.innerHTML += item.details;
 
 					if (item.loggedIn) {
 						var form = document.createElement("form");

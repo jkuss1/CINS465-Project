@@ -96,10 +96,12 @@
 		<script src="{% static 'js/vendor/foundation.min.js' %}"></script>
 		<script src="{% static 'js/app.js' %}"></script>
 		<script src="{% static 'js/websocket.js' %}"></script>
-		<script>
+		
+		<script type="text/javascript">
 			var curUsername = "{{ username }}";
 			var denyChat = {{ deny_chat }};
 		</script>
+		
 		{% block scripts %}{% endblock %}
 	</body>
 </html>

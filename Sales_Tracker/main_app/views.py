@@ -115,7 +115,8 @@ def get_popular_items(request):
 		itemData = {
 			'id': item.id,
 			'name': item.name,
-			'cost': float(item.cost),
+			'seller': item.user.username,
+			'price': str(float(item.price)),
 			'unitsAvailable': item.units_available,
 			'details': item.details,
 			'saleStart': GET_FORMATTED_TIME(item.sale_start),
@@ -153,7 +154,8 @@ def search_items(request, keyword):
 			itemData = {
 				'id': item.id,
 				'name': item.name,
-				'cost': float(item.cost),
+				'seller': item.user.username,
+				'price': str(float(item.price)),
 				'unitsAvailable': item.units_available,
 				'details': item.details,
 				'saleStart': GET_FORMATTED_TIME(item.sale_start),
@@ -261,7 +263,7 @@ def sales_info(request):
 @login_required
 def add_item(request):
 	if request.method == 'POST' and request.user.is_authenticated:
-		new_item_form = NewItemForm(request.POST)
+		new_item_form = ItemForm(request.POST)
 
 		if new_item_form.is_valid():
 			Item(
@@ -279,7 +281,7 @@ def add_item(request):
 
 			return HttpResponseRedirect('/account/user_items/')
 	else:
-		new_item_form = NewItemForm()
+		new_item_form = ItemForm()
 	
 	context = {
 		'form': new_item_form
@@ -317,9 +319,63 @@ def add_item_images(request, itemID):
 	return render(request, 'account/add_item_images.html', context)
 
 @login_required
-def delete_item(request, itemID):
+def edit_item(request, item_id):
+	item = Item.objects.filter(id=item_id)
+
+	if item:
+		item = item[0]
+		item_data = ""
+		
+		if request.user == item.user:
+			if request.method == 'POST':
+				edit_item_form = ItemForm(request.POST)
+
+				if edit_item_form.is_valid():
+					item.name = edit_item_form.cleaned_data['name']
+					item.cost = edit_item_form.cleaned_data['cost']
+					item.price = edit_item_form.cleaned_data['price']
+					item.units_purchased = edit_item_form.cleaned_data['units_purchased']
+					item.units_available = edit_item_form.cleaned_data['units_available']
+					item.units_previously_sold = edit_item_form.cleaned_data['units_previously_sold']
+					item.sale_start = edit_item_form.cleaned_data['sale_start']
+					item.sale_end = edit_item_form.cleaned_data['sale_end']
+					item.discount_start = edit_item_form.cleaned_data['discount_start']
+					item.discount_end = edit_item_form.cleaned_data['discount_end']
+					item.details = edit_item_form.cleaned_data['details']
+					item.save()
+					
+					return HttpResponseRedirect('/account/user_items/')
+			else:
+				edit_item_form = ItemForm()
+
+				item_data = json.dumps({
+					'name': item.name,
+					'cost': str(float(item.cost)),
+					'price': str(float(item.price)),
+					'units_purchased': item.units_purchased,
+					'units_available': item.units_available,
+					'units_previously_sold': item.units_previously_sold,
+					'sale_start': str(item.sale_start),
+					'sale_end': str(item.sale_end),
+					'discount_start': str(item.discount_start),
+					'discount_end': str(item.discount_end),
+					'details': item.details
+				})
+			
+			context = {
+				'form': edit_item_form,
+				'item': item,
+				'item_data': item_data
+			}
+
+			return render(request, 'account/edit_item.html', context)
+	else:
+		return HttpResponseRedirect('/')
+
+@login_required
+def delete_item(request, item_id):
 	if request.method == 'POST':
-		item = Item.objects.get(id=itemID)
+		item = Item.objects.get(id=item_id)
 
 		if item.user == request.user:
 			item.delete()

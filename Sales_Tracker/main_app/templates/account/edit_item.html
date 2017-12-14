@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block title %}
+	Edit "{{ item.name }}"
+{% endblock%}
+
+{% block content %}
+	<h1 class="text-center">Edit "{{ item.name }}"</h1>
+	<form method="post" action="{% url 'edit_item' item.id %}">
+		{% csrf_token %}
+
+		{{ form }}
+		<input type="submit" value="Save" class="button expanded"/>
+	</form>
+
+	<input id="item_data" type="hidden" value="{{ item_data }}">
+
+	{% include 'sub_templates/calendar.html' %}
+	{% endblock %}
+
+{% block scripts %}
+	<script type="text/javascript">
+		function formatTimestamp(data)
+		{
+			if (data != "None") {
+				data = data.split("+")[0].split(":");
+				return data[0] + ":" + data[1];
+			}
+			
+			return null;
+		}
+
+		var itemData = JSON.parse(document.getElementById("item_data").value);
+
+		document.getElementById("id_name").value = itemData.name;
+		document.getElementById("id_cost").value = itemData.cost;
+		document.getElementById("id_price").value = itemData.price;
+		document.getElementById("id_units_purchased").value = itemData.units_purchased;
+		document.getElementById("id_units_available").value = itemData.units_available;
+		document.getElementById("id_units_previously_sold").value = itemData.units_previously_sold;
+		document.getElementById("id_sale_start").value = formatTimestamp(itemData.sale_start);
+		document.getElementById("id_sale_end").value = formatTimestamp(itemData.sale_end);
+		document.getElementById("id_discount_start").value = formatTimestamp(itemData.discount_start);
+		document.getElementById("id_discount_end").value = formatTimestamp(itemData.discount_end);
+		document.getElementById("id_details").value = itemData.details;
+	</script>
+{% endblock %}

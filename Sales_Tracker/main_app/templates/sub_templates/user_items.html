@@ -11,10 +11,8 @@
 			<a class="button" href="{% url 'add_item_images' user_item.id %}">Upload Item Image(s)</a>
 			
 			<p>
-				<strong>Item Details:</strong> {{ user_item.details }}
-				<br>
 				<strong>Cost Per Item:</strong> ${{ user_item.cost }}
-				<br>
+				&emsp;&emsp;&emsp;
 				<strong>Total Items Available:</strong> {{ user_item.units_available }}
 			</p>
 			
@@ -33,8 +31,10 @@
 					<strong>Discount End:</strong> {{ user_item.discount_end }}
 				</p>
 			{% endif %}
+
+			<p><strong>Item Details:</strong> {{ user_item.details }}</p>
 			
-			<a class="button" href="{% url 'index' %}">Edit Item</a>
+			<a class="button" href="{% url 'edit_item' user_item.id %}">Edit Item</a>
 			
 			<form id="del-item-form-{{ user_item.id }}-{{ user_item.name }}" class="inline" onsubmit="return deleteItem(this)">
 				{% csrf_token %}

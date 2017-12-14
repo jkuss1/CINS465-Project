@@ -1,4 +1,13 @@
+from .models import *
+
 def processors(request):
+    if request.user.username and not AccountSettings.objects.filter(user=request.user):
+        AccountSettings.objects.create(
+            user = request.user,
+            deny_chat = False,
+            online = True,
+        )
+    
     deny_chat = "false"
 
     if request.user.username:

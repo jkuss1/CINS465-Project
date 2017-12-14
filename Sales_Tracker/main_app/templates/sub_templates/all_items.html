@@ -2,19 +2,19 @@
 	{% for item in items %}
 		<div class="item-cont">
 			<h3>{{ item.name }}</h3>
-			<p>Seller: {{ item.user.username }}</p>
+			<p><strong>Seller:</strong> {{ item.user.username }}</p>
 			
 			{% for image_tuple in item.images %}
 				{% if forloop.counter <= 3 %}
 					<img class="img-cont" src="{{ image_tuple.0 }}" alt="{{ image_tuple.1 }}">
 				{% endif %}
 			{% endfor %}
+
+			<br><br>
 			
 			<p>
-				<strong>Item Details:</strong> {{ item.details }}
-				<br>
-				<strong>Cost Per Item:</strong> ${{ item.cost }}
-				<br>
+				<strong>Price Per Item:</strong> ${{ item.price }}
+				&emsp;&emsp;&emsp;
 				<strong>Total Available:</strong> {{ item.units_available }}
 			</p>
 			
@@ -33,6 +33,8 @@
 					<strong>Discount End:</strong> {{ item.discount_end }}
 				</p>
 			{% endif %}
+			
+			<p><strong>Item Details:</strong> {{ item.details }}</p>
 
 			{% if user.is_authenticated %}
 				<form id="add-to-cart-form-{{ item.id }}" class="inline" onsubmit="return addToCart(this)">

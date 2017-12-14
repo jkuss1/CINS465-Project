@@ -8,7 +8,7 @@ MONEY_PLACEHOLDER = '12.34'
 DATETIME_FORMATS = ['%Y-%m-%d %H:%M']
 DATETIME_PLACEHOLDER = 'YYYY-mm-dd HH:MM (24-Hour Time Format)'
 
-class NewItemForm(forms.ModelForm):
+class ItemForm(forms.ModelForm):
 	name = forms.CharField(
 		widget = forms.TextInput(
 			attrs = {
@@ -18,6 +18,7 @@ class NewItemForm(forms.ModelForm):
 	)
 
 	cost = forms.DecimalField(
+		label = "Cost (What you paid)",
 		widget = forms.NumberInput(
 			attrs = {
 				'placeholder': MONEY_PLACEHOLDER
@@ -34,6 +35,7 @@ class NewItemForm(forms.ModelForm):
 	)
 
 	units_purchased = forms.IntegerField(
+		label = "Units Purchased (May be more than available, used to determine profits)",
 		widget = forms.NumberInput(
 			attrs = {
 				'placeholder': "0"
@@ -50,6 +52,7 @@ class NewItemForm(forms.ModelForm):
 	)
 
 	units_previously_sold = forms.IntegerField(
+		label = "Units Previously Sold (Used to determine profits)",
 		widget = forms.NumberInput(
 			attrs = {
 				'placeholder': "0"
