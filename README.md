@@ -1,4 +1,4 @@
-# Sales Tracker
+# [Sales Tracker](http://35.197.40.105/)
 ### Created By
 - Erik Ingvoldsen
 - Jacob Kuss
