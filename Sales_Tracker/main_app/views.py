@@ -1,4 +1,6 @@
 import json
+from datetime import datetime
+
 from django.core.mail import send_mail
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
@@ -219,15 +221,41 @@ def sales_data(request):
 		revenue = item.units_sold * item.price
 		cost = item.units_purchased * item.cost
 		profit = revenue - cost
+
+		dates_sold = ItemUnitSoldDate.objects.filter(item=item)
+		months = {}
+		
+		for date_sold in dates_sold:
+			month = str(date_sold.date).split("-")[1]
+
+			if not months.get(month):
+				months[month] = date_sold.amount
+			else:
+				months[month] = months[month] + date_sold.amount
+		
+		most_popular_month = None
+		most_popular_month_amount = -1
+		least_popular_month = None
+		least_popular_month_amount = float('inf')
+
+		for month in months:
+			month = int(month)
+
+			if month > most_popular_month_amount:
+				most_popular_month = MONTH_NUM_TO_NAME[month] + "."
+			
+			if month < least_popular_month_amount:
+				least_popular_month = MONTH_NUM_TO_NAME[month] + "."
 		
 		user_items.append({
 			'id': item.id,
 			'name': item.name,
 			'units_sold': item.units_sold,
+			'most_popular_month': most_popular_month,
+			'least_popular_month': least_popular_month,
 			'revenue': revenue,
 			'cost': cost,
-			'profit': profit,
-			'images': item.images
+			'profit': profit
 		})
 	
 	context = {
@@ -466,6 +494,21 @@ def checkout(request, username):
 				if cart_item_id:
 					item = Item.objects.get(id=cart_item_id)
 					item.units_sold = item.units_sold + 1
+					
+					dates_sold = ItemUnitSoldDate.objects.filter(item=item)
+
+					if dates_sold:
+						for date_sold in dates_sold:
+							if str(date_sold.date) == str(datetime.now()).split(" ")[0]:
+								date_sold.amount = date_sold.amount + 1
+								date_sold.save()
+								break
+					else:
+						ItemUnitSoldDate.objects.create(
+							item = item,
+							amount = 1
+						)
+					
 					item.save()
 			
 			return HttpResponseRedirect('/account/receipt/' + username)

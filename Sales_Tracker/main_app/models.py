@@ -81,6 +81,23 @@ class Item(models.Model):
 	def __str__(self):
 		return self.name
 
+class ItemUnitSoldDate(models.Model):
+	item = models.ForeignKey(
+		Item,
+		on_delete = models.CASCADE,
+	)
+
+	amount = models.IntegerField(
+		default = 0
+	)
+
+	date = models.DateField(
+		auto_now_add = True
+	)
+
+	def __str__(self):
+		return self.item.name
+
 class ItemImage(models.Model):
 	item = models.ForeignKey(
 		Item,
